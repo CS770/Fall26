@@ -1,0 +1,401 @@
+/* CS 770 (Fall 2026) — public course site
+   Single stylesheet. No build step.
+   Theming works three ways: light (default), OS-auto dark
+   (prefers-color-scheme), and a forced light/dark via data-theme
+   on <html> (set by theme.js). */
+
+:root {
+  --cardinal: #c5050c;
+  --cardinal-soft: #9b1b1b;
+  --bg: #ffffff;
+  --surface: #f7f5f2;
+  --surface-2: #efece7;
+  --text: #1c1b1a;
+  --muted: #605b54;
+  --border: #e0ddd7;
+  --link: #a5121a;
+  --accent-bar: #c5050c;
+  --shadow: 0 1px 3px rgba(0, 0, 0, 0.06), 0 6px 18px rgba(0, 0, 0, 0.04);
+  --radius: 10px;
+  --maxw: 940px;
+  --font: "Newsreader", Georgia, serif;
+  --display: "Fraunces", Georgia, serif;
+  --serif: "Newsreader", Georgia, "Times New Roman", serif;
+}
+
+/* Dark palette, factored out so it can be triggered two ways. */
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --bg: #17161a;
+    --surface: #201f24;
+    --surface-2: #2a292f;
+    --text: #ececed;
+    --muted: #a5a1a8;
+    --border: #333238;
+    --link: #ff8a8f;
+    --cardinal: #e5484d;
+    --accent-bar: #e5484d;
+    --shadow: 0 1px 3px rgba(0, 0, 0, 0.4), 0 6px 20px rgba(0, 0, 0, 0.3);
+  }
+}
+
+:root[data-theme="dark"] {
+  --bg: #17161a;
+  --surface: #201f24;
+  --surface-2: #2a292f;
+  --text: #ececed;
+  --muted: #a5a1a8;
+  --border: #333238;
+  --link: #ff8a8f;
+  --cardinal: #e5484d;
+  --accent-bar: #e5484d;
+  --shadow: 0 1px 3px rgba(0, 0, 0, 0.4), 0 6px 20px rgba(0, 0, 0, 0.3);
+}
+
+* { box-sizing: border-box; }
+
+html { -webkit-text-size-adjust: 100%; scroll-behavior: smooth; }
+
+body {
+  margin: 0;
+  font-family: var(--font);
+  color: var(--text);
+  background: var(--bg);
+  line-height: 1.62;
+  font-size: 18px;
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+}
+
+/* scroll anchoring so section headings clear the layout */
+:target { scroll-margin-top: 1.5rem; }
+
+/* ---------- Header ---------- */
+.site-header {
+  border-top: 5px solid var(--accent-bar);
+  background: var(--surface);
+  border-bottom: 1px solid var(--border);
+}
+.site-header .wrap {
+  max-width: var(--maxw);
+  margin: 0 auto;
+  padding: 1.4rem 1.25rem 0.6rem;
+}
+.site-header .course-num {
+  font-size: 0.82rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--cardinal);
+  font-weight: 700;
+  margin: 0 0 0.15rem;
+}
+.site-header h1 {
+  font-family: var(--display);
+  font-optical-sizing: auto;
+  font-size: 2.15rem;
+  line-height: 1.12;
+  letter-spacing: -0.01em;
+  margin: 0 0 0.35rem;
+  font-weight: 600;
+}
+.site-header .meta {
+  color: var(--muted);
+  font-size: 0.95rem;
+  margin: 0 0 0.9rem;
+}
+.site-header .meta strong { color: var(--text); font-weight: 600; }
+
+/* ---------- Nav ---------- */
+nav.site-nav {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.25rem 1.25rem;
+  border-top: 1px solid var(--border);
+  padding-top: 0.5rem;
+}
+nav.site-nav a {
+  color: var(--muted);
+  text-decoration: none;
+  font-size: 0.92rem;
+  font-weight: 600;
+  padding: 0.35rem 0;
+  border-bottom: 2px solid transparent;
+}
+nav.site-nav a:hover { color: var(--text); }
+
+/* external-link arrow — Canvas / Email in the nav open elsewhere.
+   Crisp SVG (bolder than a font glyph), tinted by currentColor so it
+   follows the link colour in light/dark and on hover. */
+a.external::after {
+  content: "";
+  display: inline-block;
+  width: 0.66em;
+  height: 0.66em;
+  margin-left: 0.22em;
+  vertical-align: -0.02em;
+  background-color: currentColor;
+  -webkit-mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23000' stroke-width='2.75' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M7 17 17 7'/%3E%3Cpath d='M8 7h9v9'/%3E%3C/svg%3E") center / contain no-repeat;
+          mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23000' stroke-width='2.75' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M7 17 17 7'/%3E%3Cpath d='M8 7h9v9'/%3E%3C/svg%3E") center / contain no-repeat;
+}
+nav.site-nav a[aria-current="page"] {
+  color: var(--cardinal);
+  border-bottom-color: var(--cardinal);
+}
+
+/* ---------- Theme toggle ---------- */
+.theme-toggle {
+  margin-left: auto;
+  align-self: center;
+  font-family: var(--font);
+  font-size: 0.8rem;
+  font-weight: 500;
+  color: var(--muted);
+  background: transparent;
+  border: 1px solid var(--border);
+  border-radius: 999px;
+  padding: 0.2rem 0.7rem;
+  cursor: pointer;
+  line-height: 1.4;
+  white-space: nowrap;
+}
+.theme-toggle:hover { color: var(--text); border-color: var(--muted); }
+.theme-toggle:focus-visible {
+  outline: 2px solid var(--cardinal);
+  outline-offset: 2px;
+}
+
+/* ---------- Layout ---------- */
+main {
+  max-width: var(--maxw);
+  margin: 0 auto;
+  padding: 2rem 1.25rem 3rem;
+}
+section { margin-bottom: 2.75rem; }
+
+h2 {
+  font-family: var(--display);
+  font-optical-sizing: auto;
+  font-weight: 600;
+  font-size: 1.55rem;
+  letter-spacing: -0.005em;
+  margin: 0 0 0.75rem;
+  padding-bottom: 0.3rem;
+  border-bottom: 2px solid var(--border);
+}
+h3 { font-size: 1.15rem; margin: 1.5rem 0 0.4rem; }
+p { margin: 0 0 1rem; }
+a { color: var(--link); }
+a:hover { text-decoration: none; }
+
+.lede {
+  font-size: 1.12rem;
+  color: var(--text);
+}
+.theme-callout {
+  background: var(--surface);
+  border-left: 4px solid var(--cardinal);
+  border-radius: 0 var(--radius) var(--radius) 0;
+  padding: 1rem 1.25rem;
+  margin: 1.5rem 0;
+}
+.theme-callout p { margin: 0; }
+.theme-callout em { color: var(--muted); }
+
+/* ---------- Schedule table (overview) ---------- */
+.table-scroll { overflow-x: auto; -webkit-overflow-scrolling: touch; }
+table.schedule {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.95rem;
+  min-width: 560px;
+}
+table.schedule th,
+table.schedule td {
+  text-align: left;
+  padding: 0.7rem 0.8rem;
+  border-bottom: 1px solid var(--border);
+  vertical-align: top;
+}
+table.schedule thead th {
+  font-size: 0.78rem;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: var(--muted);
+  border-bottom: 2px solid var(--border);
+}
+table.schedule tbody tr:hover { background: var(--surface); }
+table.schedule .wk {
+  white-space: nowrap;
+  color: var(--muted);
+  font-variant-numeric: tabular-nums;
+}
+table.schedule .wk strong { color: var(--text); display: block; font-size: 1rem; }
+table.schedule .off { color: var(--muted); font-style: italic; }
+table.schedule a { text-decoration: none; font-weight: 600; }
+table.schedule a:hover { text-decoration: underline; }
+
+/* ---------- Week detail cards (schedule page) ---------- */
+.week {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 1.25rem 1.4rem 1.4rem;
+  margin: 0 0 1.5rem;
+  box-shadow: var(--shadow);
+}
+.week > h3 {
+  margin-top: 0;
+  font-family: var(--display);
+  font-optical-sizing: auto;
+  font-weight: 600;
+  font-size: 1.3rem;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: 0.5rem;
+}
+.week .wk-tag {
+  font-size: 0.72rem;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: #fff;
+  background: var(--cardinal);
+  border-radius: 999px;
+  padding: 0.15rem 0.6rem;
+  font-family: var(--font);
+  font-weight: 700;
+}
+.session { margin-top: 1.1rem; }
+.session:first-of-type { margin-top: 0.9rem; }
+.session .day {
+  font-size: 0.78rem;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  font-weight: 700;
+  color: var(--cardinal);
+  margin: 0 0 0.15rem;
+}
+.session .topic { font-weight: 600; font-size: 1.02rem; margin: 0 0 0.4rem; }
+.session .topic.off { color: var(--muted); font-weight: 500; font-style: italic; }
+
+.readings { margin: 0.3rem 0 0.2rem; padding-left: 1.15rem; }
+.readings li { margin: 0.28rem 0; font-size: 0.93rem; line-height: 1.5; }
+.readings .opt { color: var(--muted); }
+.readings .opt::before { content: "Optional — "; font-style: italic; }
+.reading-label {
+  font-size: 0.76rem;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: var(--muted);
+  font-weight: 700;
+  margin: 0.7rem 0 0.1rem;
+}
+.slides {
+  margin-top: 0.6rem;
+  font-size: 0.86rem;
+  color: var(--muted);
+}
+.slides .todo { font-style: italic; }
+
+/* TODO / review flags */
+.todo, .review {
+  color: var(--cardinal-soft);
+  background: rgba(197, 5, 12, 0.07);
+  border-radius: 4px;
+  padding: 0 0.3rem;
+  font-size: 0.86em;
+  font-style: normal;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) .todo,
+  :root:not([data-theme="light"]) .review {
+    color: #ffb3b6;
+    background: rgba(229, 72, 77, 0.14);
+  }
+}
+:root[data-theme="dark"] .todo,
+:root[data-theme="dark"] .review {
+  color: #ffb3b6;
+  background: rgba(229, 72, 77, 0.14);
+}
+
+/* ---------- Syllabus page ---------- */
+.syllabus h2 { margin-top: 2rem; }
+.syllabus table {
+  width: 100%;
+  border-collapse: collapse;
+  margin: 1rem 0;
+  font-size: 0.95rem;
+}
+.syllabus th, .syllabus td {
+  text-align: left;
+  padding: 0.55rem 0.7rem;
+  border-bottom: 1px solid var(--border);
+  vertical-align: top;
+}
+.syllabus thead th {
+  font-size: 0.78rem;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: var(--muted);
+  border-bottom: 2px solid var(--border);
+}
+.syllabus td.num { text-align: center; white-space: nowrap; font-variant-numeric: tabular-nums; }
+.syllabus ul { padding-left: 1.2rem; }
+.syllabus li { margin: 0.4rem 0; }
+.info-grid {
+  display: grid;
+  grid-template-columns: max-content 1fr;
+  gap: 0.4rem 1.25rem;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 1.1rem 1.3rem;
+  margin: 1rem 0 1.5rem;
+  font-size: 0.96rem;
+}
+.info-grid dt { font-weight: 700; color: var(--muted); }
+.info-grid dd { margin: 0; }
+
+/* ---------- Buttons ---------- */
+.btn-row { display: flex; flex-wrap: wrap; gap: 0.7rem; margin: 1.4rem 0 0.5rem; }
+.btn {
+  display: inline-block;
+  background: var(--cardinal);
+  color: #fff;
+  text-decoration: none;
+  font-weight: 600;
+  font-size: 0.95rem;
+  padding: 0.55rem 1.1rem;
+  border-radius: var(--radius);
+  border: 1px solid var(--cardinal);
+}
+.btn:hover { background: var(--cardinal-soft); }
+.btn.secondary {
+  background: transparent;
+  color: var(--cardinal);
+}
+.btn.secondary:hover { background: var(--surface-2); }
+
+/* ---------- Footer ---------- */
+footer.site-footer {
+  border-top: 1px solid var(--border);
+  background: var(--surface);
+  color: var(--muted);
+  font-size: 0.86rem;
+}
+footer.site-footer .wrap {
+  max-width: var(--maxw);
+  margin: 0 auto;
+  padding: 1.4rem 1.25rem 2rem;
+}
+footer.site-footer a { color: var(--link); }
+
+/* ---------- Responsive ---------- */
+@media (max-width: 560px) {
+  body { font-size: 16px; }
+  .site-header h1 { font-size: 1.5rem; }
+  .info-grid { grid-template-columns: 1fr; gap: 0.15rem 0; }
+  .info-grid dd { margin-bottom: 0.5rem; }
+  main { padding: 1.4rem 1rem 2.5rem; }
+}

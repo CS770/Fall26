@@ -1,0 +1,463 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Schedule &amp; Readings — CS 770 · Fall 2026</title>
+  <meta name="description" content="Week-by-week schedule and public required readings for CS 770 Human-Computer Interaction, Fall 2026.">
+  <script>
+    (function () {
+      try {
+        var t = localStorage.getItem('cs770-theme');
+        if (t === 'light' || t === 'dark') document.documentElement.setAttribute('data-theme', t);
+      } catch (e) {}
+    })();
+  </script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400..700&family=Newsreader:ital,opsz,wght@0,6..72,400..600;1,6..72,400..500&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+  <script src="theme.js" defer></script>
+</head>
+<body>
+  <header class="site-header">
+    <div class="wrap">
+      <p class="course-num">CS / Psych / EdPsych 770</p>
+      <h1>Schedule &amp; Readings</h1>
+      <p class="meta">
+        Fall 2026 &middot; <strong><a href="https://bmutlu.github.io">Prof. Bilge Mutlu</a></strong> &middot;
+        Mondays &amp; Fridays, 9:30&ndash;10:45&nbsp;am
+      </p>
+      <nav class="site-nav" aria-label="Primary">
+        <a href="index.html">Home</a>
+        <a href="schedule.html" aria-current="page">Schedule &amp; Readings</a>
+        <a href="syllabus.html">Syllabus</a>
+        <a class="external" href="https://canvas.wisc.edu/courses/527593" target="_blank" rel="noopener">Canvas</a>
+        <a class="external" href="mailto:hci-class@cs.wisc.edu">Email</a>
+        <button class="theme-toggle" onclick="__cs770cycle()">◐ Auto</button>
+      </nav>
+    </div>
+  </header>
+
+  <main>
+    <section id="intro">
+      <p class="lede">
+        Monday sessions are the reading seminar; Friday sessions are research methods.
+        Listed below are each week&rsquo;s <strong>seminar topic and its required readings</strong>
+        and the <strong>Friday methods topic</strong>. Weekly assignments, discussion prompts,
+        reading PDFs, and submissions are on Canvas.
+      </p>
+      <p style="font-size:0.9rem;color:var(--muted);">
+        Reading citations are provided for reference; PDFs and any missing links
+        (<span class="review">[link TBD]</span>) are posted on Canvas. Slide links are added
+        as each lecture is finalized.
+      </p>
+    </section>
+
+    <!-- WEEK 1 -->
+    <div class="week" id="wk1">
+      <h3><span class="wk-tag">Week 1</span> Sep 2&ndash;4</h3>
+      <div class="session">
+        <p class="day">Monday, Aug 31 / Sep 2</p>
+        <p class="topic off">No class &mdash; instruction begins Wednesday, Sep 2.</p>
+      </div>
+      <div class="session">
+        <p class="day">Friday, Sep 4 &mdash; Intro to 770</p>
+        <p class="topic">The three strands &amp; the AI-era framing</p>
+        <p class="reading-label">Required readings</p>
+        <ul class="readings">
+          <li>Lazar, Feng &amp; Hochheiser (2017), <em>Research Methods in HCI</em>, Ch. 1 &mdash; Introduction to HCI research.</li>
+          <li>A short HCI-overview essay. <span class="review">[essay TBD]</span></li>
+        </ul>
+        <p class="slides"><strong>Slides:</strong> <span class="todo">TODO</span></p>
+      </div>
+    </div>
+
+    <!-- WEEK 2 -->
+    <div class="week" id="wk2">
+      <h3><span class="wk-tag">Week 2</span> Sep 7&ndash;11</h3>
+      <div class="session">
+        <p class="day">Monday, Sep 7</p>
+        <p class="topic off">Labor Day &mdash; no class.</p>
+      </div>
+      <div class="session">
+        <p class="day">Friday, Sep 11 &mdash; Methods</p>
+        <p class="topic">What is HCI research? + Project kickoff</p>
+        <p class="reading-label">Textbook</p>
+        <ul class="readings">
+          <li>Lazar, Feng &amp; Hochheiser (2017), Ch. 1 &mdash; Introduction to HCI research.</li>
+        </ul>
+        <p class="reading-label">Framing reading</p>
+        <ul class="readings">
+          <li>Jacob O. Wobbrock &amp; Julie A. Kientz, &ldquo;Research Contributions in Human-Computer Interaction,&rdquo; <em>interactions</em> 23(3), 38&ndash;44, 2016. <span class="review">[confirm]</span></li>
+        </ul>
+        <p class="slides"><strong>Slides:</strong> <span class="todo">TODO</span></p>
+      </div>
+    </div>
+
+    <!-- WEEK 3 -->
+    <div class="week" id="wk3">
+      <h3><span class="wk-tag">Week 3</span> Sep 14&ndash;18</h3>
+      <div class="session">
+        <p class="day">Monday, Sep 14 &mdash; Seminar</p>
+        <p class="topic">Foundations &amp; Visions of HCI</p>
+        <p class="reading-label">Required readings</p>
+        <ul class="readings">
+          <li>Vannevar Bush, &ldquo;As We May Think,&rdquo; <em>The Atlantic</em>, July 1945.
+            <a href="https://www.theatlantic.com/magazine/archive/1945/07/as-we-may-think/303881/">[read]</a></li>
+          <li>J.C.R. Licklider, &ldquo;Man-Computer Symbiosis,&rdquo; <em>IRE Transactions on Human Factors in Electronics</em>, HFE-1, 4&ndash;11, 1960.
+            <a href="https://groups.csail.mit.edu/medg/people/psz/Licklider.html">[read]</a></li>
+          <li>Lucy Suchman, <em>Plans and Situated Actions</em>, Cambridge Univ. Press, 1987 &mdash; Introduction + Ch. 1.</li>
+          <li>Don Norman, <em>The Design of Everyday Things</em>, rev. ed., 2013 &mdash; Gulfs of Execution &amp; Evaluation + conceptual/mental-models sections.</li>
+          <li>Ben Shneiderman, &ldquo;Human-Centered Artificial Intelligence: Reliable, Safe &amp; Trustworthy,&rdquo; <em>Int. J. Human-Computer Interaction</em> 36(6), 495&ndash;504, 2020.</li>
+          <li class="opt">Douglas Engelbart, &ldquo;Augmenting Human Intellect: A Conceptual Framework,&rdquo; SRI Summary Report AFOSR-3223, 1962.</li>
+        </ul>
+        <p class="slides"><strong>Slides:</strong> <span class="todo">TODO</span></p>
+      </div>
+      <div class="session">
+        <p class="day">Friday, Sep 18 &mdash; Methods</p>
+        <p class="topic">Choosing Methods + Research Ethics &amp; IRB</p>
+        <p class="reading-label">Textbook</p>
+        <ul class="readings">
+          <li>Lazar, Feng &amp; Hochheiser (2017), Ch. 15 (Working with human subjects) [+ Ch. 16 on participants].</li>
+        </ul>
+        <p class="reading-label">Framing readings</p>
+        <ul class="readings">
+          <li>Joseph E. McGrath, &ldquo;Methodology Matters,&rdquo; in <em>Readings in HCI: Toward the Year 2000</em>, Morgan Kaufmann, 1995, 152&ndash;169.</li>
+          <li>Amy Edmondson &amp; Stacy McManus, &ldquo;Methodological Fit in Management Field Research,&rdquo; <em>Academy of Management Review</em> 32(4), 1155&ndash;1179, 2007.</li>
+          <li>The Belmont Report, 1979.
+            <a href="https://www.hhs.gov/ohrp/regulations-and-policy/belmont-report/read-the-belmont-report/index.html">[read]</a></li>
+          <li>Amy Bruckman, &ldquo;Research Ethics and HCI,&rdquo; in <em>Ways of Knowing in HCI</em>, Springer, 2014, 449&ndash;468.</li>
+        </ul>
+        <p class="slides"><strong>Slides:</strong> <span class="todo">TODO</span></p>
+      </div>
+    </div>
+
+    <!-- WEEK 4 -->
+    <div class="week" id="wk4">
+      <h3><span class="wk-tag">Week 4</span> Sep 21&ndash;25</h3>
+      <div class="session">
+        <p class="day">Monday, Sep 21 &mdash; Seminar</p>
+        <p class="topic">Human-AI Interaction: Mixed-Initiative, Complementarity &amp; Evaluation</p>
+        <p class="reading-label">Required readings</p>
+        <ul class="readings">
+          <li>Eric Horvitz, &ldquo;Principles of Mixed-Initiative User Interfaces,&rdquo; <em>CHI 1999</em>.</li>
+          <li>Saleema Amershi et al., &ldquo;Guidelines for Human-AI Interaction,&rdquo; <em>CHI 2019</em>.</li>
+          <li>Gagan Bansal et al., &ldquo;Does the Whole Exceed its Parts? The Effect of AI Explanations on Complementary Team Performance,&rdquo; <em>CHI 2021</em>.</li>
+          <li>Zana Bu&ccedil;inca, Maja Barbara Malaya &amp; Krzysztof Z. Gajos, &ldquo;To Trust or to Think: Cognitive Forcing Functions Can Reduce Overreliance on AI in AI-assisted Decision-Making,&rdquo; <em>CSCW 2021</em>.</li>
+        </ul>
+        <p class="slides"><strong>Slides:</strong> <span class="todo">TODO</span></p>
+      </div>
+      <div class="session">
+        <p class="day">Friday, Sep 25 &mdash; Methods</p>
+        <p class="topic">Design-led Inquiry / Research through Design + Wizard-of-Oz</p>
+        <p class="reading-label">Textbook</p>
+        <ul class="readings">
+          <li>Lazar, Feng &amp; Hochheiser (2017) &mdash; Ch. 10 (Usability testing); design-led inquiry material. <span class="review">[confirm chapters]</span></li>
+        </ul>
+        <p class="reading-label">Framing readings</p>
+        <ul class="readings">
+          <li>John Zimmerman &amp; Jodi Forlizzi, &ldquo;Research Through Design in HCI,&rdquo; in <em>Ways of Knowing in HCI</em>, Springer, 2014, 167&ndash;190.</li>
+          <li class="opt">William Gaver, &ldquo;Science and Design: The Implications of Different Forms of Accountability,&rdquo; in <em>Ways of Knowing in HCI</em>, 2014, 143&ndash;166.</li>
+          <li>Wizard-of-Oz as method for studying not-yet-built systems. <span class="review">[reading TBD]</span></li>
+        </ul>
+        <p class="slides"><strong>Slides:</strong> <span class="todo">TODO</span></p>
+      </div>
+    </div>
+
+    <!-- WEEK 5 -->
+    <div class="week" id="wk5">
+      <h3><span class="wk-tag">Week 5</span> Sep 28&ndash;Oct 2</h3>
+      <div class="session">
+        <p class="day">Monday, Sep 28 &mdash; Seminar</p>
+        <p class="topic">Social Computing &amp; CSCW</p>
+        <p class="reading-label">Required readings</p>
+        <ul class="readings">
+          <li>Kjeld Schmidt &amp; Liam Bannon, &ldquo;Taking CSCW Seriously: Supporting Articulation Work,&rdquo; <em>CSCW journal</em>, 1992.</li>
+          <li>Jonathan Grudin, &ldquo;Why CSCW Applications Fail: Problems in the Design and Evaluation of Organizational Interfaces,&rdquo; <em>CSCW 1988</em>.</li>
+          <li>Joon Sung Park et al., &ldquo;Social Simulacra: Creating Populated Prototypes for Social Computing Systems,&rdquo; <em>UIST 2022</em>. <span class="review">[verify cite]</span></li>
+          <li>Joon Sung Park et al., &ldquo;Generative Agents: Interactive Simulacra of Human Behavior,&rdquo; <em>UIST 2023</em>.</li>
+          <li>Mark Ackerman, &ldquo;The Intellectual Challenge of CSCW: The Gap Between Social Requirements and Technical Feasibility,&rdquo; 2000. <span class="review">[verify cite]</span></li>
+        </ul>
+        <p class="slides"><strong>Slides:</strong> <span class="todo">TODO</span></p>
+      </div>
+      <div class="session">
+        <p class="day">Friday, Oct 2 &mdash; Methods</p>
+        <p class="topic">Qualitative Field Methods &mdash; Ethnography + Probes/Diaries</p>
+        <p class="reading-label">Textbook</p>
+        <ul class="readings">
+          <li>Lazar, Feng &amp; Hochheiser (2017), Ch. 9 (Ethnography) + Ch. 6 (Diaries).</li>
+        </ul>
+        <p class="reading-label">Framing readings</p>
+        <ul class="readings">
+          <li>Paul Dourish, &ldquo;Reading and Interpreting Ethnography,&rdquo; in <em>Ways of Knowing in HCI</em>, Springer, 2014, 1&ndash;24.</li>
+          <li>Probes / diary / experience-sampling framing reading. <span class="review">[reading TBD]</span></li>
+        </ul>
+        <p class="slides"><strong>Slides:</strong> <span class="todo">TODO</span></p>
+      </div>
+    </div>
+
+    <!-- WEEK 6 -->
+    <div class="week" id="wk6">
+      <h3><span class="wk-tag">Week 6</span> Oct 5&ndash;9</h3>
+      <div class="session">
+        <p class="day">Monday, Oct 5 &mdash; Seminar</p>
+        <p class="topic">Generative AI, Creativity &amp; Tools for Thought</p>
+        <p class="reading-label">Required readings</p>
+        <ul class="readings">
+          <li>Vannevar Bush, &ldquo;As We May Think,&rdquo; <em>The Atlantic</em>, 1945.
+            <a href="https://www.theatlantic.com/magazine/archive/1945/07/as-we-may-think/303881/">[read]</a></li>
+          <li>Lee, Sarkar, Tankelevitch, et al., &ldquo;The Impact of Generative AI on Critical Thinking: Self-Reported Reductions in Cognitive Effort and Confidence Effects,&rdquo; <em>CHI 2025</em>.</li>
+          <li class="opt">Dhillon, Molad, et al., &ldquo;Shaping Human-AI Collaboration: Varied Scaffolding Levels in Co-writing with Language Models,&rdquo; <em>CHI 2024</em>.</li>
+        </ul>
+        <p class="slides"><strong>Slides:</strong> <span class="todo">TODO</span></p>
+      </div>
+      <div class="session">
+        <p class="day">Friday, Oct 9 &mdash; Methods</p>
+        <p class="topic">Experimental Design + Measurement Basics</p>
+        <p class="reading-label">Textbook</p>
+        <ul class="readings">
+          <li>Lazar, Feng &amp; Hochheiser (2017), Ch. 2 (Experimental research) + Ch. 3 (Experimental design).</li>
+        </ul>
+        <p class="slides"><strong>Slides:</strong> <span class="todo">TODO</span></p>
+      </div>
+    </div>
+
+    <!-- WEEK 7 -->
+    <div class="week" id="wk7">
+      <h3><span class="wk-tag">Week 7</span> Oct 12&ndash;16</h3>
+      <div class="session">
+        <p class="day">Monday, Oct 12 &mdash; Seminar</p>
+        <p class="topic">Accessibility, Aging &amp; AI</p>
+        <p class="reading-label">Required readings</p>
+        <ul class="readings">
+          <li>Wobbrock, Kane, Gajos, Harada &amp; Froehlich, &ldquo;Ability-Based Design: Concept, Principles and Examples,&rdquo; <em>ACM Transactions on Accessible Computing</em> 3(3), 2011.</li>
+          <li>Glazko, Yamagami, Desai, Mack, Potluri, Xu &amp; Mankoff, &ldquo;An Autoethnographic Case Study of Generative Artificial Intelligence&rsquo;s Utility for Accessibility,&rdquo; <em>ASSETS 2023</em>.</li>
+          <li class="opt">Meredith Ringel Morris, &ldquo;AI and Accessibility: A Discussion of Ethical Considerations,&rdquo; <em>CACM</em> 63(6), 2020; Whittaker, Morris et al., <em>Disability, Bias, and AI</em>, AI Now Institute, 2019.</li>
+        </ul>
+        <p class="slides"><strong>Slides:</strong> <span class="todo">TODO</span></p>
+      </div>
+      <div class="session">
+        <p class="day">Friday, Oct 16 &mdash; Methods</p>
+        <p class="topic">Method-Design Crit</p>
+        <p class="reading-label">Textbook</p>
+        <ul class="readings">
+          <li>Lazar, Feng &amp; Hochheiser (2017), Ch. 5 (Surveys) + Ch. 13 (Measuring the human) &mdash; scales &amp; reliability.</li>
+        </ul>
+        <p class="slides"><strong>Slides:</strong> <span class="todo">TODO</span></p>
+      </div>
+    </div>
+
+    <!-- WEEK 8 -->
+    <div class="week" id="wk8">
+      <h3><span class="wk-tag">Week 8</span> Oct 19&ndash;23</h3>
+      <div class="session">
+        <p class="day">Monday, Oct 19 &mdash; Seminar</p>
+        <p class="topic">Ubiquitous, Mobile &amp; Tangible Computing</p>
+        <p class="reading-label">Required readings</p>
+        <ul class="readings">
+          <li>Mark Weiser, &ldquo;The Computer for the 21st Century,&rdquo; <em>Scientific American</em> 265(3), 94&ndash;104, 1991.</li>
+          <li>Mark Weiser &amp; John Seely Brown, &ldquo;The Coming Age of Calm Technology,&rdquo; 1996/97. <span class="review">[verify cite]</span></li>
+          <li>Paul Dourish, &ldquo;What We Talk About When We Talk About Context,&rdquo; <em>Personal and Ubiquitous Computing</em> 8(1), 19&ndash;30, 2004.</li>
+          <li>Lucy Suchman, <em>Plans and Situated Actions</em>, 1987 &mdash; Intro + Ch. 1 (revisited from Week 3).</li>
+        </ul>
+        <p class="slides"><strong>Slides:</strong> <span class="todo">TODO</span></p>
+      </div>
+      <div class="session">
+        <p class="day">Friday, Oct 23 &mdash; Methods</p>
+        <p class="topic">Qualitative Analysis &mdash; Grounded Theory / Open-Coding + AI-Assisted Qual</p>
+        <p class="reading-label">Textbook</p>
+        <ul class="readings">
+          <li>Lazar, Feng &amp; Hochheiser (2017), Ch. 11 (Analyzing qualitative data).</li>
+        </ul>
+        <p class="reading-label">Framing readings</p>
+        <ul class="readings">
+          <li>Michael Muller, &ldquo;Curiosity, Creativity, and Surprise as Analytic Tools: Grounded Theory Method,&rdquo; in <em>Ways of Knowing in HCI</em>, Springer, 2014, 25&ndash;48.</li>
+          <li>A 2023&ndash;26 paper on LLM-assisted coding / thematic analysis and its validity cautions. <span class="review">[reading TBD]</span></li>
+        </ul>
+        <p class="slides"><strong>Slides:</strong> <span class="todo">TODO</span></p>
+      </div>
+    </div>
+
+    <!-- WEEK 9 -->
+    <div class="week" id="wk9">
+      <h3><span class="wk-tag">Week 9</span> Oct 26&ndash;30</h3>
+      <div class="session">
+        <p class="day">Monday, Oct 26 &mdash; Seminar</p>
+        <p class="topic">Agents, Delegation &amp; Embodiment</p>
+        <p class="reading-label">Required readings</p>
+        <ul class="readings">
+          <li>Lucy Suchman, <em>Human-Machine Reconfigurations: Plans and Situated Actions</em>, 2nd ed., Cambridge Univ. Press, 2007.</li>
+          <li>Wendy E. Mackay, co-adaptation (<em>Intellectica</em>, 2000) or <em>Creating Human-Computer Partnerships</em> (Springer, 2024). <span class="review">[pick one; confirm cite]</span></li>
+          <li>Krzysztof Gajos &amp; Lena Mamykina, &ldquo;Do People Engage Cognitively with AI? Impact of AI Assistance on Incidental Learning,&rdquo; <em>IUI 2022</em>.</li>
+          <li>Park, O&rsquo;Brien, Cai, Morris, Liang &amp; Bernstein, &ldquo;Generative Agents: Interactive Simulacra of Human Behavior,&rdquo; <em>UIST 2023</em> (re-read through the delegation lens).</li>
+        </ul>
+        <p class="slides"><strong>Slides:</strong> <span class="todo">TODO</span></p>
+      </div>
+      <div class="session">
+        <p class="day">Friday, Oct 30 &mdash; Methods</p>
+        <p class="topic">Statistics I &mdash; Descriptive + Effect Sizes &amp; CIs</p>
+        <p class="reading-label">Textbook</p>
+        <ul class="readings">
+          <li>Lazar, Feng &amp; Hochheiser (2017), Ch. 4 (Statistical analysis) &mdash; descriptive statistics.</li>
+        </ul>
+        <p class="reading-label">Framing reading</p>
+        <ul class="readings">
+          <li>A short anchor on effect sizes &amp; confidence intervals over null-hypothesis testing. <span class="review">[reading TBD]</span></li>
+        </ul>
+        <p class="slides"><strong>Slides:</strong> <span class="todo">TODO</span></p>
+      </div>
+    </div>
+
+    <!-- WEEK 10 -->
+    <div class="week" id="wk10">
+      <h3><span class="wk-tag">Week 10</span> Nov 2&ndash;6</h3>
+      <div class="session">
+        <p class="day">Monday, Nov 2 &mdash; Seminar</p>
+        <p class="topic">XR &amp; Spatial Computing</p>
+        <p class="reading-label">Required readings</p>
+        <ul class="readings">
+          <li>Mel Slater, &ldquo;Place Illusion and Plausibility Can Lead to Realistic Behaviour in Immersive Virtual Environments,&rdquo; <em>Phil. Trans. R. Soc. B</em> 364, 2009.</li>
+          <li>Slater et al., &ldquo;A Separate Reality,&rdquo; <em>Frontiers in Virtual Reality</em>, 2022.</li>
+          <li>Apple Vision Pro spatial-computing framing (2024), read as an industry claim, paired with a 2024&ndash;25 generative-3D / world-model paper. <span class="review">[generative-3D paper TBD]</span></li>
+          <li class="opt">Fitts&rsquo;s Law for 3D target acquisition. <span class="review">[cite TBD]</span></li>
+        </ul>
+        <p class="slides"><strong>Slides:</strong> <span class="todo">TODO</span></p>
+      </div>
+      <div class="session">
+        <p class="day">Friday, Nov 6 &mdash; Methods</p>
+        <p class="topic">Statistics II &mdash; Inferential (t-test, &chi;&sup2;, ANOVA) + Regression</p>
+        <p class="reading-label">Textbook</p>
+        <ul class="readings">
+          <li>Lazar, Feng &amp; Hochheiser (2017), Ch. 4 (Statistical analysis) &mdash; inferential statistics.</li>
+        </ul>
+        <p class="slides"><strong>Slides:</strong> <span class="todo">TODO</span></p>
+      </div>
+    </div>
+
+    <!-- WEEK 11 -->
+    <div class="week" id="wk11">
+      <h3><span class="wk-tag">Week 11</span> Nov 9&ndash;13</h3>
+      <div class="session">
+        <p class="day">Monday, Nov 9 &mdash; Seminar</p>
+        <p class="topic">Affective &amp; Physiological Computing</p>
+        <p class="reading-label">Required readings</p>
+        <ul class="readings">
+          <li>Rosalind Picard, <em>Affective Computing</em>, MIT Press, 1997.</li>
+          <li>Barrett, Adolphs, Marsella, Martinez &amp; Pollak, &ldquo;Emotional Expressions Reconsidered: Challenges to Inferring Emotion From Human Facial Movements,&rdquo; <em>Psychological Science in the Public Interest</em> 20(1), 2019.</li>
+          <li>Morris &amp; Brubaker, &ldquo;Generative Ghosts,&rdquo; <em>CHI 2025</em>.</li>
+          <li>De Freitas et al., &ldquo;AI Companions Reduce Loneliness,&rdquo; <em>HBS Working Paper 24-078</em>, 2024 (non-archival working paper). <span class="review">[verify cite]</span></li>
+        </ul>
+        <p class="slides"><strong>Slides:</strong> <span class="todo">TODO</span></p>
+      </div>
+      <div class="session">
+        <p class="day">Friday, Nov 13 &mdash; Methods</p>
+        <p class="topic">Analysis/Results Crit</p>
+        <p class="reading-label">Textbook</p>
+        <ul class="readings">
+          <li>Lazar, Feng &amp; Hochheiser (2017) &mdash; analysis / reliability chapter. <span class="review">[confirm chapter]</span></li>
+        </ul>
+        <p class="slides"><strong>Slides:</strong> <span class="todo">TODO</span></p>
+      </div>
+    </div>
+
+    <!-- WEEK 12 -->
+    <div class="week" id="wk12">
+      <h3><span class="wk-tag">Week 12</span> Nov 16&ndash;20</h3>
+      <div class="session">
+        <p class="day">Monday, Nov 16 &mdash; Seminar</p>
+        <p class="topic">Privacy, Security &amp; Surveillance</p>
+        <p class="reading-label">Required readings</p>
+        <ul class="readings">
+          <li>Helen Nissenbaum, &ldquo;Privacy as Contextual Integrity,&rdquo; <em>Washington Law Review</em> 79(1), 2004.</li>
+          <li>Mireshghallah, Kim, Zhou, et al., &ldquo;Can LLMs Keep a Secret? Testing Privacy Implications of Language Models via Contextual Integrity Theory (ConfAIde),&rdquo; <em>ICLR 2024</em>.</li>
+          <li>Shokri, Stronati, Song &amp; Shmatikov, &ldquo;Membership Inference Attacks Against Machine Learning Models,&rdquo; <em>IEEE Symposium on Security &amp; Privacy 2017</em>.</li>
+          <li>Mary L. Gray &amp; Siddharth Suri, <em>Ghost Work</em>, Houghton Mifflin Harcourt, 2019 (bridge to Week 13). <span class="review">[chapter TBD]</span></li>
+        </ul>
+        <p class="slides"><strong>Slides:</strong> <span class="todo">TODO</span></p>
+      </div>
+      <div class="session">
+        <p class="day">Friday, Nov 20 &mdash; Methods</p>
+        <p class="topic">Research Reporting &amp; Writing + Open Science</p>
+        <p class="reading-label">Textbook</p>
+        <ul class="readings">
+          <li>Lazar, Feng &amp; Hochheiser (2017) &mdash; reporting / writing-up research chapter. <span class="review">[confirm chapter]</span></li>
+        </ul>
+        <p class="slides"><strong>Slides:</strong> <span class="todo">TODO</span></p>
+      </div>
+    </div>
+
+    <!-- WEEK 13 -->
+    <div class="week" id="wk13">
+      <h3><span class="wk-tag">Week 13</span> Nov 23&ndash;27</h3>
+      <div class="session">
+        <p class="day">Monday, Nov 23 &mdash; Seminar</p>
+        <p class="topic">Critical, Responsible &amp; Sustainable AI</p>
+        <p class="reading-label">Required readings</p>
+        <ul class="readings">
+          <li>Falco, Shneiderman, et al., &ldquo;Governing AI Safety Through Independent Audits,&rdquo; <em>Nature Machine Intelligence</em>, 2021.</li>
+          <li>Mary L. Gray &amp; Siddharth Suri, <em>Ghost Work</em>, Houghton Mifflin Harcourt, 2019.</li>
+          <li>Lucy Suchman, <em>Human-Machine Reconfigurations: Plans and Situated Actions</em>, 2nd ed., 2007.</li>
+          <li>Birhane, Kalluri, et al., &ldquo;The Values Encoded in Machine Learning Research,&rdquo; <em>FAccT 2022</em>.</li>
+          <li class="opt">Strubell, Ganesh &amp; McCallum, &ldquo;Energy and Policy Considerations for Deep Learning in NLP,&rdquo; <em>ACL 2019</em>.</li>
+        </ul>
+        <p class="slides"><strong>Slides:</strong> <span class="todo">TODO</span></p>
+      </div>
+      <div class="session">
+        <p class="day">Friday, Nov 27</p>
+        <p class="topic off">Thanksgiving recess &mdash; no class.</p>
+      </div>
+    </div>
+
+    <!-- WEEK 14 -->
+    <div class="week" id="wk14">
+      <h3><span class="wk-tag">Week 14</span> Nov 30&ndash;Dec 4</h3>
+      <div class="session">
+        <p class="day">Monday, Nov 30 &mdash; Project Studio</p>
+        <p class="topic">Capstone studio (project crit) &mdash; no new seminar readings.</p>
+      </div>
+      <div class="session">
+        <p class="day">Friday, Dec 4 &mdash; Methods</p>
+        <p class="topic">Final Writing &amp; Presentation Clinic</p>
+        <p class="readings" style="list-style:none;padding-left:0;color:var(--muted);font-size:0.93rem;">
+          A working clinic (paper polish + lightning-talk prep) for the Dec 7 showcase &mdash; no new textbook chapter.
+        </p>
+        <p class="slides"><strong>Slides:</strong> <span class="todo">TODO</span></p>
+      </div>
+    </div>
+
+    <!-- WEEK 15 -->
+    <div class="week" id="wk15">
+      <h3><span class="wk-tag">Week 15</span> Dec 7&ndash;9</h3>
+      <div class="session">
+        <p class="day">Monday, Dec 7 &mdash; Final Presentations</p>
+        <p class="topic">Lightning-talk showcase &mdash; each team gives a 3-minute talk.</p>
+        <p class="slides"><strong>Slides:</strong> <span class="todo">TODO</span></p>
+      </div>
+      <div class="session">
+        <p class="day">Friday, Dec 11</p>
+        <p class="topic off">No Friday session &mdash; last class day is Wed Dec 9.</p>
+      </div>
+      <p class="readings" style="list-style:none;padding-left:0;color:var(--muted);font-size:0.93rem;margin-top:0.8rem;">
+        <strong style="color:var(--text);">Final paper due Mon Dec 14, 2026, 11:59&nbsp;pm</strong>
+        (finals week), submitted on Canvas &mdash; ACM <em>acmart</em> (sigconf) format, ~8&ndash;10 pp.
+      </p>
+    </div>
+
+    <p style="font-size:0.9rem;color:var(--muted);margin-top:1.5rem;">
+      <em>Schedule and readings subject to minor adjustment; changes are announced on Canvas.</em>
+    </p>
+  </main>
+
+  <footer class="site-footer">
+    <div class="wrap">
+      <p>
+        CS / Psych / EdPsych 770 &middot; Human-Computer Interaction &middot; Fall 2026<br>
+        <a href="https://bmutlu.github.io">Prof. Bilge Mutlu</a> &middot;
+        <a href="https://www.cs.wisc.edu/">Department of Computer Sciences</a>,
+        University of Wisconsin&ndash;Madison
+      </p>
+    </div>
+  </footer>
+</body>
+</html>

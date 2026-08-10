@@ -1,0 +1,208 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>CS/Psych/EdPsych 770 — Human-Computer Interaction · Fall 2026</title>
+  <meta name="description" content="Graduate seminar and research-methods course in Human-Computer Interaction at UW-Madison, Fall 2026. Prof. Bilge Mutlu.">
+  <script>
+    (function () {
+      try {
+        var t = localStorage.getItem('cs770-theme');
+        if (t === 'light' || t === 'dark') document.documentElement.setAttribute('data-theme', t);
+      } catch (e) {}
+    })();
+  </script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400..700&family=Newsreader:ital,opsz,wght@0,6..72,400..600;1,6..72,400..500&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+  <script src="theme.js" defer></script>
+</head>
+<body>
+  <header class="site-header">
+    <div class="wrap">
+      <p class="course-num">CS / Psych / EdPsych 770</p>
+      <h1>Human-Computer Interaction</h1>
+      <p class="meta">
+        Fall 2026 &middot; <strong><a href="https://bmutlu.github.io">Prof. Bilge Mutlu</a></strong> &middot;
+        University of Wisconsin&ndash;Madison<br>
+        Mondays &amp; Fridays, 9:30&ndash;10:45&nbsp;am &middot;
+        Morgridge Hall 2522<br>
+        TA <span class="todo">TBD</span> &middot;
+        Office hours Fridays 11&nbsp;am&ndash;12&nbsp;pm (location <span class="todo">TBD</span>) &middot;
+        <a href="mailto:hci-class@cs.wisc.edu">hci-class@cs.wisc.edu</a>
+      </p>
+      <nav class="site-nav" aria-label="Primary">
+        <a href="index.html" aria-current="page">Home</a>
+        <a href="schedule.html">Schedule &amp; Readings</a>
+        <a href="syllabus.html">Syllabus</a>
+        <a class="external" href="https://canvas.wisc.edu/courses/527593" target="_blank" rel="noopener">Canvas</a>
+        <a class="external" href="mailto:hci-class@cs.wisc.edu">Email</a>
+        <button class="theme-toggle" onclick="__cs770cycle()">◐ Auto</button>
+      </nav>
+    </div>
+  </header>
+
+  <main>
+    <section id="about">
+      <p class="lede">
+        CS&nbsp;770 is a graduate seminar and research-methods course in Human-Computer
+        Interaction, cross-listed across Computer Sciences, Psychology, and Educational
+        Psychology. It weaves together three strands: a <strong>reading seminar</strong>
+        surveying the landscape of HCI, a <strong>research-methods</strong> sequence, and a
+        semester-long <strong>team research project</strong> that culminates in a
+        conference-style paper and a final showcase.
+      </p>
+
+      <div class="theme-callout">
+        <p>
+          This year the course treats <strong>artificial intelligence &mdash; especially
+          generative and agentic AI &mdash; as a transforming force across HCI</strong>,
+          without losing the enduring fundamentals. Our organizing idea:
+          <em>fundamentals are the medium, not the message.</em> Each week we ask what the
+          durable concern of an area is, how AI is changing it, and &mdash; honestly &mdash;
+          how much. The fundamentals are the instrument you use to read the AI moment, not a
+          relic to move past.
+        </p>
+      </div>
+
+      <p>
+        First offered in Fall 2009, CS&nbsp;770 has been taught every year since &mdash;
+        enrolling more than 1,000 graduate students and training generations of computer
+        scientists in HCI research.
+      </p>
+
+      <div class="btn-row">
+        <a class="btn" href="schedule.html">Full schedule &amp; readings</a>
+        <a class="btn secondary" href="syllabus.html">Read the syllabus</a>
+        <a class="btn secondary external" href="https://canvas.wisc.edu/courses/527593" target="_blank" rel="noopener">Canvas</a>
+        <a class="btn secondary external" href="mailto:hci-class@cs.wisc.edu">Email instructional team</a>
+      </div>
+    </section>
+
+    <section id="schedule-overview">
+      <h2>Schedule at a glance</h2>
+      <p>
+        Class meets twice a week, decoupled by strand: <strong>Mondays</strong> are the reading
+        seminar (one HCI topic per week) and <strong>Fridays</strong> are research methods.
+        Select a topic to jump to that week&rsquo;s readings.
+      </p>
+      <div class="table-scroll">
+        <table class="schedule">
+          <thead>
+            <tr>
+              <th>Week</th>
+              <th>Monday &mdash; Seminar</th>
+              <th>Friday &mdash; Methods</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td class="wk"><strong>1</strong> Sep 2&ndash;4</td>
+              <td class="off">No Monday &mdash; term starts Wed Sep 2</td>
+              <td><a href="schedule.html#wk1">Intro to 770</a></td>
+            </tr>
+            <tr>
+              <td class="wk"><strong>2</strong> Sep 7&ndash;11</td>
+              <td class="off">Labor Day &mdash; no class</td>
+              <td><a href="schedule.html#wk2">What is HCI research? + Project kickoff</a></td>
+            </tr>
+            <tr>
+              <td class="wk"><strong>3</strong> Sep 14&ndash;18</td>
+              <td><a href="schedule.html#wk3">Foundations &amp; Visions of HCI</a></td>
+              <td><a href="schedule.html#wk3">Choosing Methods + Research Ethics &amp; IRB</a></td>
+            </tr>
+            <tr>
+              <td class="wk"><strong>4</strong> Sep 21&ndash;25</td>
+              <td><a href="schedule.html#wk4">Human-AI Interaction</a></td>
+              <td><a href="schedule.html#wk4">Design-led Inquiry + Wizard-of-Oz</a></td>
+            </tr>
+            <tr>
+              <td class="wk"><strong>5</strong> Sep 28&ndash;Oct 2</td>
+              <td><a href="schedule.html#wk5">Social Computing &amp; CSCW</a></td>
+              <td><a href="schedule.html#wk5">Qualitative Field Methods</a></td>
+            </tr>
+            <tr>
+              <td class="wk"><strong>6</strong> Oct 5&ndash;9</td>
+              <td><a href="schedule.html#wk6">Generative AI &amp; Tools for Thought</a></td>
+              <td><a href="schedule.html#wk6">Experimental Design + Measurement</a></td>
+            </tr>
+            <tr>
+              <td class="wk"><strong>7</strong> Oct 12&ndash;16</td>
+              <td><a href="schedule.html#wk7">Accessibility, Aging &amp; AI</a></td>
+              <td><a href="schedule.html#wk7">Method-Design Crit</a></td>
+            </tr>
+            <tr>
+              <td class="wk"><strong>8</strong> Oct 19&ndash;23</td>
+              <td><a href="schedule.html#wk8">Ubiquitous, Mobile &amp; Tangible</a></td>
+              <td><a href="schedule.html#wk8">Qualitative Analysis (Grounded Theory)</a></td>
+            </tr>
+            <tr>
+              <td class="wk"><strong>9</strong> Oct 26&ndash;30</td>
+              <td><a href="schedule.html#wk9">Agents, Delegation &amp; Embodiment</a></td>
+              <td><a href="schedule.html#wk9">Statistics I &mdash; Descriptive &amp; Effect Sizes</a></td>
+            </tr>
+            <tr>
+              <td class="wk"><strong>10</strong> Nov 2&ndash;6</td>
+              <td><a href="schedule.html#wk10">XR &amp; Spatial Computing</a></td>
+              <td><a href="schedule.html#wk10">Statistics II &mdash; Inferential &amp; Regression</a></td>
+            </tr>
+            <tr>
+              <td class="wk"><strong>11</strong> Nov 9&ndash;13</td>
+              <td><a href="schedule.html#wk11">Affective &amp; Physiological Computing</a></td>
+              <td><a href="schedule.html#wk11">Analysis/Results Crit</a></td>
+            </tr>
+            <tr>
+              <td class="wk"><strong>12</strong> Nov 16&ndash;20</td>
+              <td><a href="schedule.html#wk12">Privacy, Security &amp; Surveillance</a></td>
+              <td><a href="schedule.html#wk12">Reporting &amp; Writing + Open Science</a></td>
+            </tr>
+            <tr>
+              <td class="wk"><strong>13</strong> Nov 23&ndash;27</td>
+              <td><a href="schedule.html#wk13">Critical, Responsible &amp; Sustainable AI</a></td>
+              <td class="off">Thanksgiving &mdash; no class</td>
+            </tr>
+            <tr>
+              <td class="wk"><strong>14</strong> Nov 30&ndash;Dec 4</td>
+              <td><a href="schedule.html#wk14">Project Studio (capstone)</a></td>
+              <td><a href="schedule.html#wk14">Final Writing &amp; Presentation Clinic</a></td>
+            </tr>
+            <tr>
+              <td class="wk"><strong>15</strong> Dec 7&ndash;9</td>
+              <td><a href="schedule.html#wk15">Final Presentations (lightning talks)</a></td>
+              <td class="off">No Friday &mdash; last class day Wed Dec 9</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+      <p style="font-size:0.9rem;color:var(--muted);">
+        <em>Final paper due Mon Dec 14, 11:59&nbsp;pm. Schedule subject to minor adjustment;
+        changes announced on Canvas.</em>
+      </p>
+    </section>
+
+    <section id="where">
+      <h2>Where things live</h2>
+      <p>
+        Assignments, discussion, submissions, and grades live on <strong>Canvas</strong>;
+        project papers are written in <strong>Overleaf</strong> (ACM format). This site holds
+        the public schedule, readings, and syllabus. For personal questions, email the
+        instructional team at <a href="mailto:hci-class@cs.wisc.edu">hci-class@cs.wisc.edu</a>;
+        bring course questions to class or office hours (Fri 11&nbsp;am&ndash;12&nbsp;pm).
+      </p>
+    </section>
+  </main>
+
+  <footer class="site-footer">
+    <div class="wrap">
+      <p>
+        CS / Psych / EdPsych 770 &middot; Human-Computer Interaction &middot; Fall 2026<br>
+        <a href="https://bmutlu.github.io">Prof. Bilge Mutlu</a> &middot;
+        <a href="https://www.cs.wisc.edu/">Department of Computer Sciences</a>,
+        University of Wisconsin&ndash;Madison
+      </p>
+    </div>
+  </footer>
+</body>
+</html>
