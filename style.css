@@ -403,3 +403,7 @@ footer.site-footer a { color: var(--link); }
 /* UW-proxied source links (textbook chapters) — NetID required */
 .readings a.uw::after { content: " \2022 UW login"; font-size: 0.78em; color: var(--muted); letter-spacing: 0.01em; }
 .readings .note { font-size: 0.85em; color: var(--muted); }
+
+/* First-meeting "no preparation" note, and the assigned-vs-due qualifier. */
+.no-prep { margin: 0.2rem 0 0.6rem; color: var(--muted); }
+.reading-label .assigned { font-weight: 400; font-size: 0.82em; color: var(--muted); letter-spacing: 0; text-transform: none; }
