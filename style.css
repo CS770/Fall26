@@ -296,6 +296,8 @@ table.schedule a:hover { text-decoration: underline; }
   color: var(--muted);
 }
 .slides .todo { font-style: italic; }
+/* Slides not yet posted: an expected state, not a flag — muted, no warning pill. */
+.slides .pending { font-style: italic; color: var(--muted); }
 
 /* TODO / review flags */
 .todo, .review {
