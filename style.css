@@ -399,3 +399,7 @@ footer.site-footer a { color: var(--link); }
   .info-grid dd { margin-bottom: 0.5rem; }
   main { padding: 1.4rem 1rem 2.5rem; }
 }
+
+/* UW-proxied source links (textbook chapters) — NetID required */
+.readings a.uw::after { content: " \2022 UW login"; font-size: 0.78em; color: var(--muted); letter-spacing: 0.01em; }
+.readings .note { font-size: 0.85em; color: var(--muted); }
