@@ -282,6 +282,7 @@ table.schedule a:hover { text-decoration: underline; }
 .readings li { margin: 0.28rem 0; font-size: 0.93rem; line-height: 1.5; }
 .readings .opt { color: var(--muted); }
 .readings .opt::before { content: "Optional — "; font-style: italic; }
+.readings.tier-opt li { color: var(--muted); }
 .reading-label {
   font-size: 0.76rem;
   text-transform: uppercase;
