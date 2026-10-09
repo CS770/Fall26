@@ -1,0 +1,260 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Which design, which test? — CS 770 · Fall 2026</title>
+  <meta name="description" content="An interactive decision aid for CS 770: from your experimental design to the statistical test that fits it.">
+  <script>
+    (function () {
+      try {
+        var t = localStorage.getItem('cs770-theme');
+        if (t === 'light' || t === 'dark') document.documentElement.setAttribute('data-theme', t);
+      } catch (e) {}
+    })();
+  </script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400..700&family=Newsreader:ital,opsz,wght@0,6..72,400..600;1,6..72,400..500&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+  <script src="theme.js" defer></script>
+  <style>
+    .dd { max-width: var(--maxw); margin: 0 auto; padding: 1.5rem 1.25rem 3rem; }
+    .dd .lede { color: var(--muted); }
+    .trail { list-style: none; padding: 0; margin: 1.2rem 0 0; display: flex; flex-wrap: wrap; gap: .4rem; }
+    .trail li { background: var(--surface-2); border: 1px solid var(--border); border-radius: 999px; padding: .15rem .75rem; font-size: .9rem; }
+    .trail li b { color: var(--cardinal); font-weight: 600; }
+    .card { background: var(--surface); border: 1px solid var(--border); border-left: 4px solid var(--accent-bar); border-radius: var(--radius); box-shadow: var(--shadow); padding: 1.3rem 1.4rem; margin-top: 1.2rem; }
+    .card h2 { font-family: var(--display); font-size: 1.35rem; margin: 0 0 .3rem; }
+    .card .hint { color: var(--muted); font-size: .95rem; margin: 0 0 1rem; }
+    .choices { display: grid; gap: .7rem; }
+    .choices button { text-align: left; font: inherit; color: var(--text); background: var(--bg); border: 1px solid var(--border); border-radius: 8px; padding: .8rem 1rem; cursor: pointer; line-height: 1.4; }
+    .choices button:hover, .choices button:focus-visible { border-color: var(--cardinal); outline: 2px solid var(--cardinal); outline-offset: 1px; }
+    .choices button strong { display: block; }
+    .choices button span { color: var(--muted); font-size: .93rem; }
+    .result .test { font-family: var(--display); font-size: 1.9rem; color: var(--cardinal); margin: .2rem 0 .4rem; line-height: 1.2; }
+    .result .design { font-weight: 600; margin: 0 0 .8rem; }
+    .result dl { margin: 0; display: grid; grid-template-columns: 9.5rem 1fr; gap: .45rem 1rem; }
+    .result dt { color: var(--muted); font-size: .93rem; }
+    .result dd { margin: 0; }
+    .actions { display: flex; gap: .6rem; flex-wrap: wrap; margin-top: 1.1rem; }
+    .actions button { font: inherit; font-size: .95rem; background: transparent; color: var(--link); border: 1px solid var(--border); border-radius: 8px; padding: .4rem .9rem; cursor: pointer; }
+    .actions button:hover { border-color: var(--link); }
+    details.map { margin-top: 2rem; }
+    details.map summary { cursor: pointer; font-weight: 600; }
+    details.map img { width: 100%; height: auto; margin-top: .8rem; border: 1px solid var(--border); border-radius: 8px; background: #fff; }
+    .fine { color: var(--muted); font-size: .9rem; margin-top: 1.6rem; }
+    @media (max-width: 560px) { .result dl { grid-template-columns: 1fr; } .result dt { margin-top: .4rem; } }
+  </style>
+</head>
+<body>
+  <header class="site-header">
+    <div class="wrap">
+      <p class="course-num">CS / Psych / EdPsych 770</p>
+      <h1>Which design, which test?</h1>
+      <p class="meta">An interactive version of the course&rsquo;s design-to-test decision map &middot; Methods 5, Friday Oct 9</p>
+      <nav class="site-nav" aria-label="Primary">
+        <a href="index.html">Home</a>
+        <a href="schedule.html">Schedule &amp; Readings</a>
+        <a href="syllabus.html">Syllabus</a>
+        <a class="external" href="https://canvas.wisc.edu/courses/527593" target="_blank" rel="noopener">Canvas</a>
+        <button class="theme-toggle" onclick="__cs770cycle()">◐ Auto</button>
+      </nav>
+    </div>
+  </header>
+
+  <main class="dd">
+    <p class="lede">Answer two or three questions about your study. You&rsquo;ll get the name of your design, the test that fits it, and what to watch for. Use it for the Step-by-Step Experimental Design (due Fri Oct 16): steps 2 and 4 decide every answer here.</p>
+
+    <ol class="trail" id="trail" aria-label="Your answers so far"></ol>
+    <div id="stage" aria-live="polite"></div>
+
+    <details class="map">
+      <summary>See the whole decision map</summary>
+      <img src="images/decision-map.png" alt="Decision map. Single-factor design: two dependent samples, paired t-test; two independent samples, unpaired t-test; two or more dependent samples, one-way repeated measures ANOVA; two or more independent samples, one-way ANOVA. Factorial design: within participants, multi-way repeated measures ANOVA; mixed-model, mixed-model ANOVA; between participants, multi-way ANOVA.">
+    </details>
+
+    <p class="fine">These are the standard parametric tests for each design, assuming a continuous outcome (DV) and roughly normal residuals. The statistics sessions later in the term cover assumptions, effect sizes, and what to do when they don&rsquo;t hold. A published paper may analyze the same design another way (for example, with regression models); the design still tells you what comparison the analysis has to make.</p>
+  </main>
+
+  <footer class="site-footer">
+    <div class="wrap">
+      <p>
+        CS / Psych / EdPsych 770 &middot; Human-Computer Interaction &middot; Fall 2026<br>
+        <a href="https://bmutlu.github.io">Prof. Bilge Mutlu</a> &middot;
+        <a href="https://www.cs.wisc.edu/">Department of Computer Sciences</a>,
+        University of Wisconsin&ndash;Madison
+      </p>
+    </div>
+  </footer>
+
+  <script>
+  (function () {
+    var Q = {
+      factors: {
+        title: "How many independent variables (factors) are you manipulating?",
+        hint: "A factor is an IV you control, e.g., the kind of AI assistance. Its values are levels.",
+        choices: [
+          { key: "one", label: "One factor", sub: "e.g., assistance: none / sentence / paragraph", next: "levels", short: "One factor" },
+          { key: "multi", label: "Two or more factors", sub: "e.g., assistance × task difficulty (a factorial design)", next: "assign", short: "Factorial" }
+        ]
+      },
+      levels: {
+        title: "How many levels (conditions) does that factor have?",
+        hint: "Count the conditions you compare, including any control or baseline.",
+        choices: [
+          { key: "two", label: "Two levels", sub: "e.g., with AI vs. without AI", next: "samples1", short: "2 levels" },
+          { key: "many", label: "Three or more levels", sub: "e.g., no AI vs. sentence vs. paragraph suggestions", next: "samples1", short: "3+ levels" }
+        ]
+      },
+      samples1: {
+        title: "Does each participant experience every level?",
+        hint: "This is the within- vs. between-participants decision (Step 4).",
+        choices: [
+          { key: "dep", label: "Yes: every participant sees every level", sub: "within-participants; the samples are dependent (paired)", short: "Within" },
+          { key: "ind", label: "No: each participant sees one level", sub: "between-participants; the samples are independent", short: "Between" }
+        ]
+      },
+      assign: {
+        title: "How are participants assigned across the factors?",
+        hint: "Decide this factor by factor: is it within or between participants?",
+        choices: [
+          { key: "within", label: "Every participant sees every combination", sub: "all factors within-participants", short: "All within" },
+          { key: "between", label: "Each participant sees one combination", sub: "all factors between-participants", short: "All between" },
+          { key: "mixed", label: "Some factors within, some between", sub: "e.g., assistance within, expertise between", short: "Mixed" }
+        ]
+      }
+    };
+
+    var R = {
+      "one|two|dep": {
+        test: "Paired t-test",
+        design: "Single-factor, within-participants design with two levels",
+        compares: "Each person's score in one condition against the same person's score in the other.",
+        watch: "Order effects: counterbalance which condition comes first.",
+        alt: "Wilcoxon signed-rank test"
+      },
+      "one|two|ind": {
+        test: "Unpaired (independent-samples) t-test",
+        design: "Single-factor, between-participants design with two levels",
+        compares: "The mean of one group against the mean of the other.",
+        watch: "Differences between people add noise: randomly assign, and plan for enough participants.",
+        alt: "Mann–Whitney U test"
+      },
+      "one|many|dep": {
+        test: "One-way repeated-measures ANOVA",
+        design: "Single-factor, within-participants design with three or more levels",
+        compares: "Whether the means differ across levels, using each person as their own control. Follow up with post-hoc comparisons to see which levels differ.",
+        watch: "Order effects: counterbalance, e.g., with a Latin square.",
+        alt: "Friedman test",
+        example: "Dhillon et al. (2024), from the Oct 9 activity, has this design: every participant wrote with no AI, next-sentence, and next-paragraph suggestions, in Latin-square order. (The paper itself analyzes it with regression models.)"
+      },
+      "one|many|ind": {
+        test: "One-way ANOVA",
+        design: "Single-factor, between-participants design with three or more levels",
+        compares: "Whether the group means differ. Follow up with post-hoc comparisons to see which groups differ.",
+        watch: "Random assignment to groups, and enough participants per group (a power analysis).",
+        alt: "Kruskal–Wallis test",
+        example: "Jakesch et al. (2023), from the Oct 9 activity, has this design: participants were randomly assigned to one of three groups (no assistant, an assistant arguing social media is good, or bad)."
+      },
+      "multi|within": {
+        test: "Multi-way repeated-measures ANOVA",
+        design: "Factorial, within-participants design",
+        compares: "The main effect of each factor and their interaction, with every participant in every combination.",
+        watch: "Sessions get long and order effects multiply: counterbalance the combinations."
+      },
+      "multi|between": {
+        test: "Multi-way (factorial) ANOVA",
+        design: "Factorial, between-participants design",
+        compares: "The main effect of each factor and their interaction, with each participant in one combination.",
+        watch: "Every combination is its own group, so the number of participants grows fast.",
+        example: "The lecture's example: gaming (low/high) × tech-savviness (low/high) on perceptions of robots, one group per combination."
+      },
+      "multi|mixed": {
+        test: "Mixed-model ANOVA",
+        design: "Factorial, mixed design (split-plot)",
+        compares: "Main effects and interactions, separating within-participant from between-participant variation.",
+        watch: "Be explicit about which factor is which. Measured factors (expertise, age) make that part quasi-experimental."
+      }
+    };
+
+    var stage = document.getElementById("stage");
+    var trail = document.getElementById("trail");
+    var path = []; // [{q, choice}]
+
+    function el(tag, attrs, html) {
+      var e = document.createElement(tag);
+      if (attrs) for (var k in attrs) e.setAttribute(k, attrs[k]);
+      if (html !== undefined) e.innerHTML = html;
+      return e;
+    }
+
+    function renderTrail() {
+      trail.innerHTML = "";
+      path.forEach(function (p, i) {
+        var li = el("li", null, "<b>" + (i + 1) + "</b> " + p.choice.short);
+        trail.appendChild(li);
+      });
+    }
+
+    function ask(qid) {
+      var q = Q[qid];
+      stage.innerHTML = "";
+      var card = el("section", { "class": "card" });
+      card.appendChild(el("h2", null, q.title));
+      card.appendChild(el("p", { "class": "hint" }, q.hint));
+      var box = el("div", { "class": "choices" });
+      q.choices.forEach(function (c) {
+        var b = el("button", { type: "button" }, "<strong>" + c.label + "</strong><span>" + c.sub + "</span>");
+        b.addEventListener("click", function () {
+          path.push({ q: qid, choice: c });
+          renderTrail();
+          if (c.next) ask(c.next); else showResult();
+        });
+        box.appendChild(b);
+      });
+      card.appendChild(box);
+      if (path.length) card.appendChild(actions());
+      stage.appendChild(card);
+      var first = box.querySelector("button");
+      if (first && path.length) first.focus();
+    }
+
+    function key() { return path.map(function (p) { return p.choice.key; }).join("|"); }
+
+    function showResult() {
+      var r = R[key()];
+      stage.innerHTML = "";
+      var card = el("section", { "class": "card result" });
+      card.appendChild(el("p", { "class": "hint" }, "The test that fits your design"));
+      card.appendChild(el("p", { "class": "test" }, r.test));
+      card.appendChild(el("p", { "class": "design" }, r.design));
+      var dl = el("dl");
+      function row(t, d) { if (!d) return; dl.appendChild(el("dt", null, t)); dl.appendChild(el("dd", null, d)); }
+      row("What it compares", r.compares);
+      row("Watch out for", r.watch);
+      row("If the data aren&rsquo;t normal", r.alt ? r.alt + " (a nonparametric alternative)" : "");
+      row("Example", r.example);
+      card.appendChild(dl);
+      card.appendChild(actions());
+      stage.appendChild(card);
+    }
+
+    function actions() {
+      var a = el("div", { "class": "actions" });
+      var back = el("button", { type: "button" }, "← Back");
+      back.addEventListener("click", function () {
+        var last = path.pop(); renderTrail();
+        ask(last.q);
+      });
+      var again = el("button", { type: "button" }, "Start over");
+      again.addEventListener("click", function () { path = []; renderTrail(); ask("factors"); });
+      a.appendChild(back); a.appendChild(again);
+      return a;
+    }
+
+    ask("factors");
+  })();
+  </script>
+</body>
+</html>
