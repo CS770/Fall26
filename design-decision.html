@@ -3,8 +3,8 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Which design, which test? — CS 770 · Fall 2026</title>
-  <meta name="description" content="An interactive decision aid for CS 770: from your experimental design to the statistical test that fits it.">
+  <title>Design your experiment, step by step — CS 770 · Fall 2026</title>
+  <meta name="description" content="An interactive decision guide for CS 770: the seven steps of experimental design, one decision at a time.">
   <script>
     (function () {
       try {
@@ -19,40 +19,51 @@
   <link rel="stylesheet" href="style.css">
   <script src="theme.js" defer></script>
   <style>
-    .dd { max-width: var(--maxw); margin: 0 auto; padding: 1.5rem 1.25rem 3rem; }
-    .dd .lede { color: var(--muted); }
-    .trail { list-style: none; padding: 0; margin: 1.2rem 0 0; display: flex; flex-wrap: wrap; gap: .4rem; }
-    .trail li { background: var(--surface-2); border: 1px solid var(--border); border-radius: 999px; padding: .15rem .75rem; font-size: .9rem; }
-    .trail li b { color: var(--cardinal); font-weight: 600; }
-    .card { background: var(--surface); border: 1px solid var(--border); border-left: 4px solid var(--accent-bar); border-radius: var(--radius); box-shadow: var(--shadow); padding: 1.3rem 1.4rem; margin-top: 1.2rem; }
-    .card h2 { font-family: var(--display); font-size: 1.35rem; margin: 0 0 .3rem; }
-    .card .hint { color: var(--muted); font-size: .95rem; margin: 0 0 1rem; }
-    .choices { display: grid; gap: .7rem; }
-    .choices button { text-align: left; font: inherit; color: var(--text); background: var(--bg); border: 1px solid var(--border); border-radius: 8px; padding: .8rem 1rem; cursor: pointer; line-height: 1.4; }
-    .choices button:hover, .choices button:focus-visible { border-color: var(--cardinal); outline: 2px solid var(--cardinal); outline-offset: 1px; }
-    .choices button strong { display: block; }
-    .choices button span { color: var(--muted); font-size: .93rem; }
-    .result .test { font-family: var(--display); font-size: 1.9rem; color: var(--cardinal); margin: .2rem 0 .4rem; line-height: 1.2; }
-    .result .design { font-weight: 600; margin: 0 0 .8rem; }
-    .result dl { margin: 0; display: grid; grid-template-columns: 9.5rem 1fr; gap: .45rem 1rem; }
-    .result dt { color: var(--muted); font-size: .93rem; }
-    .result dd { margin: 0; }
-    .actions { display: flex; gap: .6rem; flex-wrap: wrap; margin-top: 1.1rem; }
-    .actions button { font: inherit; font-size: .95rem; background: transparent; color: var(--link); border: 1px solid var(--border); border-radius: 8px; padding: .4rem .9rem; cursor: pointer; }
-    .actions button:hover { border-color: var(--link); }
-    details.map { margin-top: 2rem; }
-    details.map summary { cursor: pointer; font-weight: 600; }
-    details.map img { width: 100%; height: auto; margin-top: .8rem; border: 1px solid var(--border); border-radius: 8px; background: #fff; }
+    .dg { max-width: var(--maxw); margin: 0 auto; padding: 1.5rem 1.25rem 3rem; }
+    .dg .lede { color: var(--muted); }
+    .steps { list-style: none; padding: 0; margin: 1.2rem 0 0; display: grid; grid-template-columns: repeat(7, 1fr); gap: .35rem; }
+    .steps li button { width: 100%; font: inherit; font-size: .85rem; line-height: 1.2; padding: .45rem .3rem; border-radius: 8px; border: 1px solid var(--border); background: var(--surface); color: var(--muted); cursor: pointer; }
+    .steps li button[aria-current="step"] { border-color: var(--cardinal); color: var(--text); font-weight: 600; outline: 2px solid var(--cardinal); outline-offset: 0; }
+    .steps li button.done { color: var(--text); }
+    .steps li button.done::before { content: "✓ "; color: var(--cardinal); }
+    .card { background: var(--surface); border: 1px solid var(--border); border-top: 4px solid var(--accent-bar); border-radius: var(--radius); box-shadow: var(--shadow); padding: 1.2rem 1.4rem 1.3rem; margin-top: 1rem; }
+    .card .num { color: var(--cardinal); text-transform: uppercase; letter-spacing: .05em; font-size: .85rem; }
+    .card h2 { font-family: var(--display); font-size: 1.45rem; margin: .1rem 0 .7rem; }
+    .do { background: var(--bg); border: 1px solid var(--border); border-radius: 14px; padding: .55rem .85rem; margin: .5rem 0; }
+    .do::before { content: "Do: "; font-weight: 600; }
+    .qa { margin: 1rem 0 .4rem; }
+    .qa .q { font-weight: 600; }
+    .qa .q::before { content: "◆ "; color: var(--cardinal); }
+    .qa .help { color: var(--muted); font-size: .93rem; margin: .1rem 0 .4rem; }
+    .opts { display: flex; flex-wrap: wrap; gap: .5rem; margin-top: .4rem; }
+    .opts button { font: inherit; font-size: .95rem; color: var(--text); background: var(--bg); border: 1px solid var(--border); border-radius: 999px; padding: .3rem .95rem; cursor: pointer; }
+    .opts button:hover, .opts button:focus-visible { border-color: var(--cardinal); outline: 2px solid var(--cardinal); outline-offset: 1px; }
+    .opts button[aria-pressed="true"] { background: var(--cardinal); border-color: var(--cardinal); color: #fff; }
+    .say { margin: .5rem 0 0; padding: .5rem .8rem; border-left: 3px solid var(--border); color: var(--text); }
+    .say.back { border-left-color: var(--cardinal); }
+    .say.back::before { content: "↺ Go back and revise: "; color: var(--cardinal); font-weight: 600; }
+    .say.ok::before { content: "→ "; color: var(--cardinal); }
+    .write { margin-top: 1.2rem; }
+    .write label { display: block; font-weight: 600; color: var(--cardinal); }
+    .write .help { color: var(--muted); font-size: .93rem; margin: .1rem 0 .4rem; }
+    .write textarea { width: 100%; min-height: 7rem; font: inherit; font-size: 1rem; color: var(--text); background: var(--bg); border: 1.5px solid var(--cardinal); border-radius: 6px; padding: .6rem .7rem; resize: vertical; }
+    .nav { display: flex; justify-content: space-between; gap: .6rem; margin-top: 1rem; flex-wrap: wrap; }
+    .nav button, .tools button, .tools a { font: inherit; font-size: .95rem; background: transparent; color: var(--link); border: 1px solid var(--border); border-radius: 8px; padding: .45rem 1rem; cursor: pointer; text-decoration: none; }
+    .nav button.primary { background: var(--cardinal); color: #fff; border-color: var(--cardinal); }
+    .summary h3 { font-family: var(--display); font-size: 1.1rem; margin: 1rem 0 .2rem; }
+    .summary pre { white-space: pre-wrap; font: inherit; background: var(--bg); border: 1px solid var(--border); border-radius: 6px; padding: .6rem .8rem; margin: 0; min-height: 2.4rem; }
+    .summary .empty { color: var(--muted); font-style: italic; }
+    .tools { display: flex; gap: .6rem; flex-wrap: wrap; margin-top: 1.2rem; }
     .fine { color: var(--muted); font-size: .9rem; margin-top: 1.6rem; }
-    @media (max-width: 560px) { .result dl { grid-template-columns: 1fr; } .result dt { margin-top: .4rem; } }
+    @media (max-width: 720px) { .steps { grid-template-columns: repeat(4, 1fr); } }
   </style>
 </head>
 <body>
   <header class="site-header">
     <div class="wrap">
       <p class="course-num">CS / Psych / EdPsych 770</p>
-      <h1>Which design, which test?</h1>
-      <p class="meta">An interactive version of the course&rsquo;s design-to-test decision map &middot; Methods 5, Friday Oct 9</p>
+      <h1>Design your experiment, step by step</h1>
+      <p class="meta">An interactive decision guide &middot; for the Step-by-Step Experimental Design, due Fri Oct 16, 9:30&nbsp;am</p>
       <nav class="site-nav" aria-label="Primary">
         <a href="index.html">Home</a>
         <a href="schedule.html">Schedule &amp; Readings</a>
@@ -63,18 +74,13 @@
     </div>
   </header>
 
-  <main class="dd">
-    <p class="lede">Answer two or three questions about your study. You&rsquo;ll get the name of your design, the test that fits it, and what to watch for. Use it for the Step-by-Step Experimental Design (due Fri Oct 16): steps 2 and 4 decide every answer here.</p>
+  <main class="dg">
+    <p class="lede">Work through the seven steps for your own study. Each step asks a few questions, sends you back when something doesn&rsquo;t hold up, and ends with something you write down. At the end you get all seven answers as a draft you can copy into your assignment. Your answers stay in this browser; nothing is sent anywhere.</p>
 
-    <ol class="trail" id="trail" aria-label="Your answers so far"></ol>
+    <ol class="steps" id="steps" aria-label="Steps"></ol>
     <div id="stage" aria-live="polite"></div>
 
-    <details class="map">
-      <summary>See the whole decision map</summary>
-      <img src="images/decision-map.png" alt="Decision map. Single-factor design: two dependent samples, paired t-test; two independent samples, unpaired t-test; two or more dependent samples, one-way repeated measures ANOVA; two or more independent samples, one-way ANOVA. Factorial design: within participants, multi-way repeated measures ANOVA; mixed-model, mixed-model ANOVA; between participants, multi-way ANOVA.">
-    </details>
-
-    <p class="fine">These are the standard parametric tests for each design, assuming a continuous outcome (DV) and roughly normal residuals. The statistics sessions later in the term cover assumptions, effect sizes, and what to do when they don&rsquo;t hold. A published paper may analyze the same design another way (for example, with regression models); the design still tells you what comparison the analysis has to make.</p>
+    <p class="fine">Prefer the whole thing on one page? <a href="design-guide-overview.html">See the printable overview</a>. Built from the CS 770 lecture on step-by-step experimental design.</p>
   </main>
 
   <footer class="site-footer">
@@ -90,170 +96,280 @@
 
   <script>
   (function () {
-    var Q = {
-      factors: {
-        title: "How many independent variables (factors) are you manipulating?",
-        hint: "A factor is an IV you control, e.g., the kind of AI assistance. Its values are levels.",
-        choices: [
-          { key: "one", label: "One factor", sub: "e.g., assistance: none / sentence / paragraph", next: "levels", short: "One factor" },
-          { key: "multi", label: "Two or more factors", sub: "e.g., assistance × task difficulty (a factorial design)", next: "assign", short: "Factorial" }
-        ]
+    // Each step: do-items, a chain of questions (options may lead to another question,
+    // give guidance, or send the student back), and a write-down box.
+    var STEPS = [
+      {
+        title: "Formulate the research question",
+        short: "Research question",
+        do: ["Draft it as: <i>What are the effects of X on Y under conditions Z?</i> X and Y are your variables; Z is the population and context."],
+        start: "xyz",
+        qs: {
+          xyz: { q: "Can you name X, Y, and Z?", opts: [
+            { t: "Yes", say: "Good. Now check it against FINER.", next: "finer" },
+            { t: "Not yet", back: "If you can't name the variables yet, theory may be nascent. Consider an exploratory or qualitative study first (Week 3, methodological fit), or narrow the question until X, Y, and Z are clear." }
+          ]},
+          finer: { q: "Does it pass FINER?", help: "Feasible (people, skills, time, money) · Interesting · Novel (confirms, refutes, or extends) · Ethical (an IRB would approve it) · Relevant", opts: [
+            { t: "Yes, all five", say: "Write it down below." },
+            { t: "Not all", back: "Narrow or reframe the question until it passes every letter." }
+          ]}
+        },
+        write: { label: "Write down: your research question", help: "With X, Y, and Z named.", ph: "What are the effects of … on … under …?" }
       },
-      levels: {
-        title: "How many levels (conditions) does that factor have?",
-        hint: "Count the conditions you compare, including any control or baseline.",
-        choices: [
-          { key: "two", label: "Two levels", sub: "e.g., with AI vs. without AI", next: "samples1", short: "2 levels" },
-          { key: "many", label: "Three or more levels", sub: "e.g., no AI vs. sentence vs. paragraph suggestions", next: "samples1", short: "3+ levels" }
-        ]
+      {
+        title: "Identify variables",
+        short: "Variables",
+        do: ["List the independent variables (IVs, also called factors) with their levels, and the dependent variables (DVs)."],
+        start: "assign",
+        qs: {
+          assign: { q: "For each IV: can you assign people to its levels?", opts: [
+            { t: "Yes, for all of them", say: "They are manipulated factors.", next: "count" },
+            { t: "Not for some", say: "Those are measured factors (e.g., expertise, age). That part of the study is quasi-experimental: you can't claim it caused anything. Treat them as covariates.", next: "count" }
+          ]},
+          count: { q: "How many factors?", opts: [
+            { t: "One", say: "A single-factor design.", next: "random" },
+            { t: "Two or more", say: "A factorial design, which is recommended: you test all combinations, and see interactions. 2×2 (2^k) designs are the most efficient.", next: "random" }
+          ]},
+          random: { q: "Have you named the random factors?", help: "What varies randomly and lets you generalize: e.g., participants, stimuli, tasks.", opts: [
+            { t: "Yes", say: "Write the factor × level table below." },
+            { t: "Not yet", back: "Name them now; they shape the design and the analysis." }
+          ]}
+        },
+        write: { label: "Write down: factors × levels, DVs, random factors", help: "e.g., Assistance (none / sentence / paragraph) × Expertise (novice / expert, measured); DV: essay quality; random: participants, prompts.", ph: "" }
       },
-      samples1: {
-        title: "Does each participant experience every level?",
-        hint: "This is the within- vs. between-participants decision (Step 4).",
-        choices: [
-          { key: "dep", label: "Yes: every participant sees every level", sub: "within-participants; the samples are dependent (paired)", short: "Within" },
-          { key: "ind", label: "No: each participant sees one level", sub: "between-participants; the samples are independent", short: "Between" }
-        ]
+      {
+        title: "Generate hypotheses",
+        short: "Hypotheses",
+        do: ["Write one hypothesis per predicted effect, main or interaction: <i>Y will be higher (or lower) at level 1 of X than at level 2, under Z.</i>"],
+        start: "just",
+        qs: {
+          just: { q: "Is each hypothesis justified?", help: "From exploratory results, related theory, or reasoned face validity.", opts: [
+            { t: "Yes", next: "test" },
+            { t: "Not all", back: "Drop the unjustified ones, or run a pilot first. \"It would be interesting\" is not a justification." }
+          ]},
+          test: { q: "Is each one testable and falsifiable?", help: "Could your data prove it wrong?", opts: [
+            { t: "Yes", say: "Write them down with their justifications." },
+            { t: "Not sure", back: "Make it precise: name the levels you compare and the direction you expect." }
+          ]}
+        },
+        write: { label: "Write down: H1, H2, … each with its justification", help: "", ph: "H1: …\nBecause: …" }
       },
-      assign: {
-        title: "How are participants assigned across the factors?",
-        hint: "Decide this factor by factor: is it within or between participants?",
-        choices: [
-          { key: "within", label: "Every participant sees every combination", sub: "all factors within-participants", short: "All within" },
-          { key: "between", label: "Each participant sees one combination", sub: "all factors between-participants", short: "All between" },
-          { key: "mixed", label: "Some factors within, some between", sub: "e.g., assistance within, expertise between", short: "Mixed" }
-        ]
+      {
+        title: "Determine the experimental design",
+        short: "Design",
+        do: ["Decide factor by factor whether it is within-participants (everyone sees every level) or between-participants (each person sees one level)."],
+        start: "transfer",
+        qs: {
+          transfer: { q: "Do you expect severe transfer effects or demand characteristics?", help: "Transfer: earlier conditions change performance in later ones (learning, fatigue). Demand characteristics: participants guessing the purpose.", opts: [
+            { t: "Yes", say: "Use a between-participants design for that factor.", next: "mixed" },
+            { t: "No, moderate at most", next: "feasible" }
+          ]},
+          feasible: { q: "Would a between design need too many conditions or participants?", opts: [
+            { t: "Yes", say: "Use a within-participants design: more statistical power, fewer people.", next: "order" },
+            { t: "No, it's feasible", next: "variance" }
+          ]},
+          variance: { q: "Do you expect high variance between people (e.g., performance measures)?", opts: [
+            { t: "Yes", say: "Use a within-participants design: each person is their own control.", next: "order" },
+            { t: "No", say: "A between-participants design works and is easier to administer.", next: "mixed" }
+          ]},
+          order: { q: "Is the transfer asymmetric (condition A helps in B, but not the reverse)?", opts: [
+            { t: "No", say: "Counterbalance the order, e.g., with a Latin square.", next: "mixed" },
+            { t: "Yes", say: "Counterbalancing can't fix asymmetric transfer: make this factor between-participants.", next: "mixed" }
+          ]},
+          mixed: { q: "Do your factors land on different sides?", help: "Answer for all your factors together.", opts: [
+            { t: "Yes", say: "A mixed-model (split-plot) design: some factors within, some between. Powerful, but harder to administer and analyze." },
+            { t: "No", say: "All within or all between. Write it down." }
+          ]}
+        },
+        write: { label: "Write down: within / between / mixed, factor by factor", help: "And how you counterbalance any within factor.", ph: "" }
+      },
+      {
+        title: "Develop the task and procedure",
+        short: "Task & procedure",
+        do: ["Design a task that represents the real-world context Z: relevant, easy to control and interpret, and motivating."],
+        start: "load",
+        qs: {
+          load: { q: "Does the effect need extra cognitive or perceptual load to show?", opts: [
+            { t: "Yes", say: "Add a distractor task.", next: "demand" },
+            { t: "No", next: "demand" }
+          ]},
+          demand: { q: "Would knowing the purpose change what participants do?", opts: [
+            { t: "Yes", say: "Use a cover story (a deceptive task). It needs IRB approval and a debrief at the end.", next: "replicate" },
+            { t: "No", next: "replicate" }
+          ]},
+          replicate: { q: "Write the procedure: could another lab replicate your study from it?", help: "Instructions, the participant's role, what the experimenter does, equipment, and a timeline from consent to measures to compensation.", opts: [
+            { t: "Yes", say: "Write the task and procedure down." },
+            { t: "Not yet", back: "Add detail until someone else could run it without asking you." }
+          ]}
+        },
+        write: { label: "Write down: the task, and the procedure step by step", help: "", ph: "1. Consent\n2. …" }
+      },
+      {
+        title: "Determine manipulations and measurements",
+        short: "Manipulations & measures",
+        do: ["For each manipulated factor, define the treatment levels and a control level.", "Measure everything you don't manipulate: performance, behavior, self-report, physiological signals, demographics."],
+        start: "control",
+        qs: {
+          control: { q: "What should the control level give you?", opts: [
+            { t: "A floor", say: "A baseline (lower bound), e.g., no AI.", next: "measure" },
+            { t: "A ceiling", say: "A gold standard (upper bound), e.g., an expert human.", next: "measure" }
+          ]},
+          measure: { q: "Does each measure fit the construct it stands for, and measure it reliably?", opts: [
+            { t: "Yes", say: "Write down the conditions and the measures." },
+            { t: "Not sure", back: "Choose a measure that matches the construct; prefer validated scales. The Oct 16 crit will push on this." }
+          ]}
+        },
+        write: { label: "Write down: conditions table, and a measure for every DV and covariate", help: "", ph: "" }
+      },
+      {
+        title: "Identify participants",
+        short: "Participants",
+        do: ["Define the population from Z, and plan how you will recruit."],
+        start: "rep",
+        qs: {
+          rep: { q: "Is your sample representative of the target population?", opts: [
+            { t: "Yes", next: "power" },
+            { t: "Not really", back: "Revise recruitment, or narrow Z in your research question (Step 1) to match who you can reach." }
+          ]},
+          power: { q: "Is it large enough for statistical power?", help: "Run a power analysis. Between-participants designs need more people.", opts: [
+            { t: "Yes", next: "bal" },
+            { t: "No", back: "Make a factor within-participants (Step 4), or cut a factor or level (Step 2)." }
+          ]},
+          bal: { q: "Is it balanced on your measured factors?", opts: [
+            { t: "Yes", say: "Write down your sampling plan and target N." },
+            { t: "No", back: "Recruit to balance them, e.g., similar numbers of novices and experts." }
+          ]}
+        },
+        write: { label: "Write down: sampling plan and target N", help: "", ph: "" }
       }
-    };
+    ];
 
-    var R = {
-      "one|two|dep": {
-        test: "Paired t-test",
-        design: "Single-factor, within-participants design with two levels",
-        compares: "Each person's score in one condition against the same person's score in the other.",
-        watch: "Order effects: counterbalance which condition comes first.",
-        alt: "Wilcoxon signed-rank test"
-      },
-      "one|two|ind": {
-        test: "Unpaired (independent-samples) t-test",
-        design: "Single-factor, between-participants design with two levels",
-        compares: "The mean of one group against the mean of the other.",
-        watch: "Differences between people add noise: randomly assign, and plan for enough participants.",
-        alt: "Mann–Whitney U test"
-      },
-      "one|many|dep": {
-        test: "One-way repeated-measures ANOVA",
-        design: "Single-factor, within-participants design with three or more levels",
-        compares: "Whether the means differ across levels, using each person as their own control. Follow up with post-hoc comparisons to see which levels differ.",
-        watch: "Order effects: counterbalance, e.g., with a Latin square.",
-        alt: "Friedman test",
-        example: "Dhillon et al. (2024), from the Oct 9 activity, has this design: every participant wrote with no AI, next-sentence, and next-paragraph suggestions, in Latin-square order. (The paper itself analyzes it with regression models.)"
-      },
-      "one|many|ind": {
-        test: "One-way ANOVA",
-        design: "Single-factor, between-participants design with three or more levels",
-        compares: "Whether the group means differ. Follow up with post-hoc comparisons to see which groups differ.",
-        watch: "Random assignment to groups, and enough participants per group (a power analysis).",
-        alt: "Kruskal–Wallis test",
-        example: "Jakesch et al. (2023), from the Oct 9 activity, has this design: participants were randomly assigned to one of three groups (no assistant, an assistant arguing social media is good, or bad)."
-      },
-      "multi|within": {
-        test: "Multi-way repeated-measures ANOVA",
-        design: "Factorial, within-participants design",
-        compares: "The main effect of each factor and their interaction, with every participant in every combination.",
-        watch: "Sessions get long and order effects multiply: counterbalance the combinations."
-      },
-      "multi|between": {
-        test: "Multi-way (factorial) ANOVA",
-        design: "Factorial, between-participants design",
-        compares: "The main effect of each factor and their interaction, with each participant in one combination.",
-        watch: "Every combination is its own group, so the number of participants grows fast.",
-        example: "The lecture's example: gaming (low/high) × tech-savviness (low/high) on perceptions of robots, one group per combination."
-      },
-      "multi|mixed": {
-        test: "Mixed-model ANOVA",
-        design: "Factorial, mixed design (split-plot)",
-        compares: "Main effects and interactions, separating within-participant from between-participant variation.",
-        watch: "Be explicit about which factor is which. Measured factors (expertise, age) make that part quasi-experimental."
-      }
-    };
+    var KEY = "cs770-design-guide-v1";
+    var state = { step: 0, picks: {}, text: {} };
+    try { var saved = JSON.parse(localStorage.getItem(KEY)); if (saved) state = saved; } catch (e) {}
+    function save() { try { localStorage.setItem(KEY, JSON.stringify(state)); } catch (e) {} }
 
-    var stage = document.getElementById("stage");
-    var trail = document.getElementById("trail");
-    var path = []; // [{q, choice}]
+    var stage = document.getElementById("stage"), stepsEl = document.getElementById("steps");
+    function el(tag, attrs, html) { var e = document.createElement(tag); if (attrs) for (var k in attrs) e.setAttribute(k, attrs[k]); if (html !== undefined) e.innerHTML = html; return e; }
+    function esc(s) { return s.replace(/[&<>]/g, function (c) { return { "&": "&amp;", "<": "&lt;", ">": "&gt;" }[c]; }); }
 
-    function el(tag, attrs, html) {
-      var e = document.createElement(tag);
-      if (attrs) for (var k in attrs) e.setAttribute(k, attrs[k]);
-      if (html !== undefined) e.innerHTML = html;
-      return e;
-    }
-
-    function renderTrail() {
-      trail.innerHTML = "";
-      path.forEach(function (p, i) {
-        var li = el("li", null, "<b>" + (i + 1) + "</b> " + p.choice.short);
-        trail.appendChild(li);
+    function renderSteps() {
+      stepsEl.innerHTML = "";
+      STEPS.forEach(function (s, i) {
+        var b = el("button", { type: "button" }, (i + 1) + ". " + s.short);
+        if (i === state.step) b.setAttribute("aria-current", "step");
+        if ((state.text[i] || "").trim()) b.className = "done";
+        b.addEventListener("click", function () { state.step = i; save(); render(); });
+        var li = el("li"); li.appendChild(b); stepsEl.appendChild(li);
       });
+      var sb = el("button", { type: "button" }, "Summary");
+      if (state.step === 7) sb.setAttribute("aria-current", "step");
+      sb.addEventListener("click", function () { state.step = 7; save(); render(); });
+      var li = el("li"); li.appendChild(sb); stepsEl.appendChild(li);
+      stepsEl.style.gridTemplateColumns = "repeat(8, 1fr)";
     }
 
-    function ask(qid) {
-      var q = Q[qid];
-      stage.innerHTML = "";
+    function renderStep(i) {
+      var s = STEPS[i], picks = state.picks[i] || {};
       var card = el("section", { "class": "card" });
-      card.appendChild(el("h2", null, q.title));
-      card.appendChild(el("p", { "class": "hint" }, q.hint));
-      var box = el("div", { "class": "choices" });
-      q.choices.forEach(function (c) {
-        var b = el("button", { type: "button" }, "<strong>" + c.label + "</strong><span>" + c.sub + "</span>");
-        b.addEventListener("click", function () {
-          path.push({ q: qid, choice: c });
-          renderTrail();
-          if (c.next) ask(c.next); else showResult();
+      card.appendChild(el("div", { "class": "num" }, "Step " + (i + 1) + " of 7"));
+      card.appendChild(el("h2", null, s.title));
+      s.do.forEach(function (d) { card.appendChild(el("div", { "class": "do" }, d)); });
+
+      var qid = s.start;
+      while (qid) {
+        var qd = s.qs[qid], box = el("div", { "class": "qa" });
+        box.appendChild(el("div", { "class": "q" }, qd.q));
+        if (qd.help) box.appendChild(el("div", { "class": "help" }, qd.help));
+        var opts = el("div", { "class": "opts", role: "group", "aria-label": qd.q });
+        var chosen = picks[qid];
+        qd.opts.forEach(function (o, k) {
+          var b = el("button", { type: "button", "aria-pressed": String(chosen === k) }, o.t);
+          (function (qid, k) {
+            b.addEventListener("click", function () {
+              state.picks[i] = state.picks[i] || {};
+              // reset the answers that come after this one on the current path
+              var p = state.picks[i], cut = false;
+              pathOf(s, p).forEach(function (id) { if (cut) delete p[id]; if (id === qid) cut = true; });
+              p[qid] = k; save(); render();
+            });
+          })(qid, k);
+          opts.appendChild(b);
         });
-        box.appendChild(b);
-      });
-      card.appendChild(box);
-      if (path.length) card.appendChild(actions());
+        box.appendChild(opts);
+        if (chosen !== undefined) {
+          var o = qd.opts[chosen];
+          if (o.back) box.appendChild(el("p", { "class": "say back" }, o.back));
+          else if (o.say) box.appendChild(el("p", { "class": "say ok" }, o.say));
+          card.appendChild(box);
+          qid = o.back ? null : (o.next || null);
+        } else { card.appendChild(box); qid = null; }
+      }
+
+      var w = el("div", { "class": "write" });
+      var id = "w" + i;
+      w.appendChild(el("label", { "for": id }, s.write.label));
+      if (s.write.help) w.appendChild(el("div", { "class": "help" }, s.write.help));
+      var ta = el("textarea", { id: id, placeholder: s.write.ph || "" });
+      ta.value = state.text[i] || "";
+      ta.addEventListener("input", function () { state.text[i] = ta.value; save(); renderSteps(); });
+      w.appendChild(ta);
+      card.appendChild(w);
+
+      var nav = el("div", { "class": "nav" });
+      var prev = el("button", { type: "button" }, "← " + (i ? "Step " + i : "Start"));
+      prev.disabled = i === 0;
+      prev.addEventListener("click", function () { state.step = i - 1; save(); render(); });
+      var next = el("button", { type: "button", "class": "primary" }, i < 6 ? "Step " + (i + 2) + " →" : "See your design →");
+      next.addEventListener("click", function () { state.step = i + 1; save(); render(); window.scrollTo(0, 0); });
+      nav.appendChild(prev); nav.appendChild(next);
+      card.appendChild(nav);
       stage.appendChild(card);
-      var first = box.querySelector("button");
-      if (first && path.length) first.focus();
     }
 
-    function key() { return path.map(function (p) { return p.choice.key; }).join("|"); }
+    function pathOf(s, p) { // question ids along the path the current answers take
+      var out = [], id = s.start;
+      while (id && out.indexOf(id) < 0) {
+        out.push(id);
+        var k = p[id]; if (k === undefined) break;
+        var o = s.qs[id].opts[k]; id = o.back ? null : (o.next || null);
+      }
+      return out;
+    }
 
-    function showResult() {
-      var r = R[key()];
-      stage.innerHTML = "";
-      var card = el("section", { "class": "card result" });
-      card.appendChild(el("p", { "class": "hint" }, "The test that fits your design"));
-      card.appendChild(el("p", { "class": "test" }, r.test));
-      card.appendChild(el("p", { "class": "design" }, r.design));
-      var dl = el("dl");
-      function row(t, d) { if (!d) return; dl.appendChild(el("dt", null, t)); dl.appendChild(el("dd", null, d)); }
-      row("What it compares", r.compares);
-      row("Watch out for", r.watch);
-      row("If the data aren&rsquo;t normal", r.alt ? r.alt + " (a nonparametric alternative)" : "");
-      row("Example", r.example);
-      card.appendChild(dl);
-      card.appendChild(actions());
+    function text() {
+      return STEPS.map(function (s, i) { return "Step " + (i + 1) + ": " + s.title + "\n" + ((state.text[i] || "").trim() || "(not written yet)"); }).join("\n\n");
+    }
+
+    function renderSummary() {
+      var card = el("section", { "class": "card summary" });
+      card.appendChild(el("div", { "class": "num" }, "Your design"));
+      card.appendChild(el("h2", null, "Seven steps, written down"));
+      STEPS.forEach(function (s, i) {
+        card.appendChild(el("h3", null, (i + 1) + ". " + s.title));
+        var t = (state.text[i] || "").trim();
+        card.appendChild(el("pre", t ? null : { "class": "empty" }, t ? esc(t) : "Not written yet."));
+      });
+      var tools = el("div", { "class": "tools" });
+      var copy = el("button", { type: "button" }, "Copy as text");
+      copy.addEventListener("click", function () {
+        navigator.clipboard.writeText(text()).then(function () { copy.textContent = "Copied"; setTimeout(function () { copy.textContent = "Copy as text"; }, 1500); });
+      });
+      var dl = el("a", { href: "#", download: "experimental-design-draft.txt" }, "Download .txt");
+      dl.addEventListener("click", function () { dl.href = "data:text/plain;charset=utf-8," + encodeURIComponent(text()); });
+      var clear = el("button", { type: "button" }, "Start a new design");
+      clear.addEventListener("click", function () { if (confirm("Clear all your answers?")) { state = { step: 0, picks: {}, text: {} }; save(); render(); } });
+      tools.appendChild(copy); tools.appendChild(dl); tools.appendChild(clear);
+      card.appendChild(tools);
+      card.appendChild(el("p", { "class": "fine" }, "Paste this into your Step-by-Step Experimental Design and develop each part. Bring it to the Method-Design Crit on Fri Oct 16."));
       stage.appendChild(card);
     }
 
-    function actions() {
-      var a = el("div", { "class": "actions" });
-      var back = el("button", { type: "button" }, "← Back");
-      back.addEventListener("click", function () {
-        var last = path.pop(); renderTrail();
-        ask(last.q);
-      });
-      var again = el("button", { type: "button" }, "Start over");
-      again.addEventListener("click", function () { path = []; renderTrail(); ask("factors"); });
-      a.appendChild(back); a.appendChild(again);
-      return a;
+    function render() {
+      renderSteps(); stage.innerHTML = "";
+      if (state.step >= 7) renderSummary(); else renderStep(state.step);
     }
-
-    ask("factors");
+    render();
   })();
   </script>
 </body>

@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Step-by-step experimental design: overview — CS 770 · Fall 2026</title>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500..700&family=Newsreader:ital,opsz,wght@0,6..72,400..600;1,6..72,400&display=swap" rel="stylesheet">
+<style>
+  :root { --red:#c5050c; --ink:#1c1b1a; --muted:#605b54; --tint:#f7f5f2; --rule:#d9d4cc; --soft:#fdecec; }
+  * { box-sizing: border-box; }
+  body { font-family:"Newsreader",Georgia,serif; color:var(--ink); background:#fff; margin:0; font-size:15.5px; line-height:1.4; }
+  header { border-top:5px solid var(--red); background:var(--tint); border-bottom:1px solid var(--rule); padding:1rem 2rem; }
+  header h1 { font-family:"Fraunces",Georgia,serif; margin:0; font-size:1.55rem; }
+  header p { margin:.3rem 0 0; color:var(--muted); }
+  .key { display:flex; gap:1.4rem; flex-wrap:wrap; margin-top:.6rem; font-size:.92rem; color:var(--muted); }
+  .key .q, .key .o, .key .b { display:inline-block; padding:0 .45rem; border-radius:4px; }
+  main { padding:1.4rem 2rem 3rem; }
+  .flow { display:grid; grid-template-columns:repeat(4, 1fr); gap:1.1rem 1.4rem; align-items:start; }
+  .card { position:relative; background:#fff; border:1.5px solid var(--rule); border-top:4px solid var(--red); border-radius:10px; padding:.8rem .9rem .9rem; }
+  .card::after { content:"→"; position:absolute; right:-1.15rem; top:1.1rem; color:var(--red); font-size:1.2rem; }
+  .card.last::after, .card.endrow::after { content:""; }
+  .num { font-family:"Fraunces",Georgia,serif; color:var(--red); font-size:.85rem; letter-spacing:.05em; text-transform:uppercase; }
+  .card h2 { font-family:"Fraunces",Georgia,serif; font-size:1.12rem; margin:.05rem 0 .55rem; }
+  .do { background:var(--tint); border-radius:16px; padding:.35rem .65rem; margin:.35rem 0; }
+  .q { position:relative; background:#fff; border:1.5px solid var(--ink); padding:.35rem .6rem .35rem 1.7rem; margin:.5rem 0 .25rem; border-radius:3px; font-weight:600; }
+  .q::before { content:"◆"; position:absolute; left:.45rem; top:.33rem; color:var(--red); font-size:.85rem; }
+  .br { display:grid; grid-template-columns:auto 1fr; gap:.15rem .45rem; margin:.1rem 0 .2rem 1.1rem; font-size:.95rem; }
+  .br b { color:var(--red); font-weight:600; white-space:nowrap; }
+  .back { color:var(--muted); font-style:italic; }
+  .back::before { content:"↺ "; color:var(--red); font-style:normal; }
+  .o { background:var(--soft); border:1.5px solid var(--red); border-radius:4px; padding:.35rem .6rem; margin-top:.6rem; font-size:.95rem; }
+  .o::before { content:"Write down: "; font-weight:600; color:var(--red); }
+  .done { grid-column: span 1; background:var(--soft); border:1.5px solid var(--red); border-radius:10px; padding:1rem; display:flex; flex-direction:column; justify-content:center; }
+  .done h2 { font-family:"Fraunces",Georgia,serif; margin:0 0 .3rem; font-size:1.12rem; color:var(--red); }
+  .note { margin-top:1.4rem; color:var(--muted); font-size:.92rem; max-width:62rem; }
+  @media (max-width: 1100px) { .flow { grid-template-columns:repeat(2,1fr); } .card::after { content:""; } }
+  @media print { header { background:#fff; } }
+</style>
+</head>
+<body>
+<header>
+  <h1>Step-by-step experimental design: a decision guide</h1>
+  <p>CS 770 · Fall 2026. Work left to right, top to bottom. Each step ends with something you write down; the seven together are your Step-by-Step Experimental Design. <a href="design-decision.html" style="color:#a5121a">Try the interactive version →</a></p>
+  <div class="key"><span><span class="do" style="margin:0">rounded</span> do this</span><span><b style="color:var(--red)">◆</b> decide</span><span><span class="back" style="font-style:italic">go back and revise</span></span><span><span style="background:var(--soft);border:1.5px solid var(--red);padding:0 .4rem;border-radius:4px">red box</span> what you write down</span></div>
+</header>
+<main>
+<div class="flow">
+
+  <section class="card">
+    <div class="num">Step 1</div>
+    <h2>Formulate the research question</h2>
+    <div class="do">Draft it as: <i>What are the effects of X on Y under conditions Z?</i></div>
+    <div class="q">Can you name X, Y, and Z?</div>
+    <div class="br"><b>No</b><span>Theory may be nascent: consider an exploratory or qualitative study first (Week 3, methodological fit)</span><b>Yes</b><span>continue</span></div>
+    <div class="q">Does it pass FINER?</div>
+    <div class="br"><b>Check</b><span>Feasible · Interesting · Novel · Ethical · Relevant</span><b>No</b><span class="back">narrow or reframe the RQ</span></div>
+    <div class="o">the RQ, with X, Y, and Z named</div>
+  </section>
+
+  <section class="card">
+    <div class="num">Step 2</div>
+    <h2>Identify variables</h2>
+    <div class="do">List the IVs (factors) with their levels, and the DVs</div>
+    <div class="q">For each IV: can you assign people to its levels?</div>
+    <div class="br"><b>Yes</b><span>manipulated factor</span><b>No</b><span>measured factor (e.g., expertise): that part is quasi-experimental; treat it as a covariate</span></div>
+    <div class="q">How many factors?</div>
+    <div class="br"><b>One</b><span>single-factor design</span><b>Two+</b><span>factorial design (recommended): all combinations; 2<sup>k</sup> is best</span></div>
+    <div class="do">Name the random factors (e.g., participants, stimuli)</div>
+    <div class="o">a factor × level table; DVs; random factors</div>
+  </section>
+
+  <section class="card">
+    <div class="num">Step 3</div>
+    <h2>Generate hypotheses</h2>
+    <div class="do">One per predicted effect, main or interaction: <i>Y will be higher (or lower) at level 1 of X than at level 2, under Z</i></div>
+    <div class="q">Is it justified?</div>
+    <div class="br"><b>From</b><span>exploratory results, related theory, or reasoned face validity</span><b>No</b><span class="back">drop it, or pilot first</span></div>
+    <div class="q">Is it testable and falsifiable?</div>
+    <div class="br"><b>No</b><span class="back">make it more precise</span></div>
+    <div class="o">H1, H2, … each with its justification</div>
+  </section>
+
+  <section class="card endrow">
+    <div class="num">Step 4</div>
+    <h2>Determine the design <span style="font-weight:400;color:var(--muted)">(per factor)</span></h2>
+    <div class="q">Severe transfer effects or demand characteristics expected?</div>
+    <div class="br"><b>Yes</b><span>between-participants</span><b>No</b><span>next question</span></div>
+    <div class="q">Too many conditions or participants for a between design?</div>
+    <div class="br"><b>Yes</b><span>within-participants</span></div>
+    <div class="q">High variance between people (e.g., performance measures)?</div>
+    <div class="br"><b>Yes</b><span>within-participants: more power, fewer people</span><b>No</b><span>between-participants</span></div>
+    <div class="q">Do your factors land on different sides?</div>
+    <div class="br"><b>Yes</b><span>mixed-model (split-plot)</span></div>
+    <div class="do">Within factors: counterbalance (Latin square). Asymmetric transfer? Make that factor between.</div>
+    <div class="o">within / between / mixed, factor by factor</div>
+  </section>
+
+  <section class="card">
+    <div class="num">Step 5</div>
+    <h2>Develop the task and procedure</h2>
+    <div class="do">A task that represents the real-world context Z: relevant, controllable, motivating</div>
+    <div class="q">Does the effect need extra load to show?</div>
+    <div class="br"><b>Yes</b><span>add a distractor task</span></div>
+    <div class="q">Would knowing the purpose change what people do?</div>
+    <div class="br"><b>Yes</b><span>cover story (deceptive task): IRB approval and a debrief</span></div>
+    <div class="do">Write the procedure: instructions, roles, experimenter actions, equipment, timeline (consent → measures → compensation)</div>
+    <div class="q">Could another lab replicate it from this?</div>
+    <div class="br"><b>No</b><span class="back">add detail</span></div>
+    <div class="o">the task and a step-by-step procedure</div>
+  </section>
+
+  <section class="card">
+    <div class="num">Step 6</div>
+    <h2>Determine manipulations and measurements</h2>
+    <div class="do">For each manipulated factor: the treatment levels and a control level</div>
+    <div class="q">What should the control give you?</div>
+    <div class="br"><b>Floor</b><span>a baseline (lower bound)</span><b>Ceiling</b><span>a gold standard (upper bound)</span></div>
+    <div class="do">Measure everything you don't manipulate: performance · behavior · self-report · physiological · demographics</div>
+    <div class="q">Does each measure fit its construct, reliably?</div>
+    <div class="br"><b>No</b><span class="back">choose another measure</span></div>
+    <div class="o">a conditions table; a measure for every DV and covariate</div>
+  </section>
+
+  <section class="card last">
+    <div class="num">Step 7</div>
+    <h2>Identify participants</h2>
+    <div class="do">Define the population from Z; plan recruitment</div>
+    <div class="q">Representative of the target population?</div>
+    <div class="br"><b>No</b><span class="back">revise recruitment</span></div>
+    <div class="q">Large enough for statistical power? (power analysis)</div>
+    <div class="br"><b>No</b><span class="back">go within (Step 4) or cut factors (Step 2)</span></div>
+    <div class="q">Balanced on measured factors?</div>
+    <div class="br"><b>No</b><span class="back">recruit to balance</span></div>
+    <div class="o">a sampling plan and a target N</div>
+  </section>
+
+  <section class="done">
+    <h2>Done: a complete design</h2>
+    <div>Seven written pieces. Bring them to the <b>Method-Design Crit</b> (Fri Oct 16).</div>
+    
+  </section>
+
+</div>
+<p class="note">From the CS 770 lecture on step-by-step experimental design. <a href="schedule.html" style="color:#a5121a">Back to the schedule</a></p>
+</main>
+</body>
+</html>
