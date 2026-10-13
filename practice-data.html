@@ -1,0 +1,221 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Practice data — CS 770 · Fall 2026</title>
+  <meta name="description" content="Practice datasets for CS 770 methods assignments: two quantitative and two qualitative sets from published human-AI studies.">
+  <script>
+    (function () {
+      try {
+        var t = localStorage.getItem('cs770-theme');
+        if (t === 'light' || t === 'dark') document.documentElement.setAttribute('data-theme', t);
+      } catch (e) {}
+    })();
+  </script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400..700&family=Newsreader:ital,opsz,wght@0,6..72,400..600;1,6..72,400..500&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+  <script src="theme.js" defer></script>
+</head>
+<body>
+  <header class="site-header">
+    <div class="wrap">
+      <p class="course-num">CS / Psych / EdPsych 770</p>
+      <h1>Practice data</h1>
+      <p class="meta">
+        Fall 2026 &middot; <strong><a href="https://bmutlu.github.io">Prof. Bilge Mutlu</a></strong> &middot;
+        University of Wisconsin&ndash;Madison<br>
+        For the methods assignments when your project doesn&rsquo;t have the data a method needs
+      </p>
+      <nav class="site-nav" aria-label="Primary">
+        <a href="index.html">Home</a>
+        <a href="schedule.html">Schedule &amp; Readings</a>
+        <a href="syllabus.html">Syllabus</a>
+        <a class="external" href="https://canvas.wisc.edu/courses/527593" target="_blank" rel="noopener">Canvas</a>
+        <a class="external" href="mailto:hci-class@cs.wisc.edu">Email</a>
+        <button class="theme-toggle" onclick="__cs770cycle()">◐ Auto</button>
+      </nav>
+    </div>
+  </header>
+
+  <main class="syllabus">
+    <section>
+      <h2>When to use these</h2>
+      <p>
+        Not every method fits every project. When a methods assignment asks for a method your project won&rsquo;t use,
+        do it as a <strong>thought experiment</strong>: how would the method look if your project did use it?
+        We grade how well you apply the method, not whether your project uses it.
+      </p>
+      <p>
+        When an assignment needs data your project doesn&rsquo;t have (a purely qualitative project facing the statistics
+        assignments, or a purely quantitative one facing qualitative analysis), use one of the sets below. Each comes from a
+        published human-AI study, is openly licensed, and has a paper you can check your analysis against.
+        Say which set you used in your Data section and cite the paper.
+      </p>
+      <table>
+        <thead><tr><th>Assignment</th><th>Due</th><th>Use</th></tr></thead>
+        <tbody>
+          <tr><td>First-Pass Qualitative Analysis</td><td class="num">Fri Oct 30</td><td>Q1 or Q2</td></tr>
+          <tr><td>Descriptive Summary + Effect Sizes</td><td class="num">Fri Nov 6</td><td>A or B</td></tr>
+          <tr><td>Inferential Analysis Plan</td><td class="num">Fri Nov 13</td><td>A or B</td></tr>
+          <tr><td>Reporting &amp; Writing Deliverable (the effect-size result)</td><td class="num">Fri Dec 4</td><td>A or B</td></tr>
+        </tbody>
+      </table>
+      <p>Pick one quantitative set and stay with it across the three statistics assignments, so each one builds on the last.</p>
+    </section>
+
+    <section>
+      <h2>A. Generative AI and story writing (quantitative)</h2>
+      <p>
+        Anil R. Doshi &amp; Oliver P. Hauser (2024), &ldquo;Generative AI enhances individual creativity but reduces the collective
+        diversity of novel content,&rdquo; <em>Science Advances</em> 10(28), eadn5290.
+        <a href="https://doi.org/10.1126/sciadv.adn5290">doi:10.1126/sciadv.adn5290</a> (open access).
+        Data: <a href="https://doi.org/10.5281/zenodo.11654403">Zenodo</a>, CC0.
+      </p>
+      <p>
+        <strong>The study.</strong> 293 online participants wrote a short story (about eight sentences) on one of three topics.
+        Each was randomly assigned to write alone, with the option of one idea from GPT-4, or with the option of up to five ideas.
+        Before writing, everyone took the Divergent Association Task, a measure of creative ability.
+        Separate evaluators then rated each story on 1&ndash;9 scales; each story has about 12 ratings.
+        The paper reports that AI ideas raised rated novelty and usefulness, most for less creative writers, while making the
+        stories more similar to each other.
+      </p>
+      <p>
+        <strong>Files.</strong>
+        <a href="practice-data/ai-creativity-stories.csv">ai-creativity-stories.csv</a> (one row per story, 293 rows) &middot;
+        <a href="practice-data/ai-creativity-ratings.csv">ai-creativity-ratings.csv</a> (one row per evaluator rating, 3,519 rows)
+      </p>
+      <table>
+        <thead><tr><th>Variable</th><th>What it is</th></tr></thead>
+        <tbody>
+          <tr><td><code>condition</code></td><td>Manipulated, between participants: <code>human_only</code>, <code>ai_1_idea</code>, <code>ai_5_ideas</code></td></tr>
+          <tr><td><code>requested_ai_idea</code>, <code>ai_ideas_viewed</code></td><td>Whether the writer asked for any AI idea (0/1), and how many they viewed</td></tr>
+          <tr><td><code>dat_score</code>, <code>dat_group</code></td><td>Creative ability before the task (continuous), and its median split (<code>high</code>/<code>low</code>). Measured, not manipulated; 2 missing</td></tr>
+          <tr><td><code>topic</code>, <code>story_words</code>, <code>writing_seconds</code></td><td>Story topic, length, and time spent writing</td></tr>
+          <tr><td><code>writer_age</code>, <code>writer_gender</code>, <code>writer_self_creative</code></td><td>Writer demographics and self-rated creativity (1&ndash;9)</td></tr>
+          <tr><td><code>rated_*</code></td><td>Mean evaluator rating per item (1&ndash;9); <code>n_raters</code> is how many ratings went into each mean</td></tr>
+          <tr><td><code>self_*</code></td><td>The writer&rsquo;s own rating of their story on the same items</td></tr>
+          <tr><td>Items</td><td><strong>Novelty:</strong> <code>novel</code>, <code>original</code>, <code>rare</code>. <strong>Usefulness:</strong> <code>appropriate</code>, <code>feasible</code>, <code>publishable</code>. <strong>Reader experience:</strong> <code>enjoyed</code>, <code>well_written</code>, <code>boring</code> (negatively worded: reverse it before combining), <code>funny</code>, <code>twist</code>, <code>future</code></td></tr>
+          <tr><td><code>story_text</code></td><td>The story itself</td></tr>
+        </tbody>
+      </table>
+      <p>
+        <strong>Things to try.</strong> Build the novelty and usefulness indices and check their reliability (the paper reports
+        Cronbach&rsquo;s &alpha; of .92 and .89). Compare conditions with an effect size and CI; run a one-way ANOVA on condition, or a
+        two-way ANOVA of condition &times; <code>dat_group</code>; test <code>condition</code> &times; <code>requested_ai_idea</code> with &chi;&sup2;
+        among the AI conditions. Then compare your numbers with the paper&rsquo;s.
+      </p>
+      <p>
+        <strong>Watch for.</strong> Ratings are nested: each evaluator rated six stories and each story has about 12 raters.
+        Use the per-story means for t-tests and ANOVA; the ratings file is there if you want to model raters and stories directly.
+        Because <code>dat_group</code> is measured, an effect involving it is not an experimental effect.
+      </p>
+    </section>
+
+    <section>
+      <h2>B. Debating GPT-4 (quantitative)</h2>
+      <p>
+        Francesco Salvi, Manoel Horta Ribeiro, Riccardo Gallotti &amp; Robert West (2025), &ldquo;On the conversational persuasiveness of GPT-4,&rdquo;
+        <em>Nature Human Behaviour</em> 9, 1645&ndash;1653.
+        <a href="https://doi.org/10.1038/s41562-025-02194-6">doi:10.1038/s41562-025-02194-6</a> (open access).
+        Data: <a href="https://huggingface.co/datasets/frasalvi/debategpt">Hugging Face</a>, CC BY-SA 4.0
+        (our copy adds four columns and carries the same license).
+      </p>
+      <p>
+        <strong>The study.</strong> Participants held a short structured online debate (opening, rebuttal, conclusion) on a
+        sociopolitical proposition, arguing an assigned side. In a 2 &times; 2 between-participants design, the opponent was
+        either another person or GPT-4, and either did or did not see the participant&rsquo;s demographic information
+        (&ldquo;personalized&rdquo;). Participants rated their agreement with the proposition before and after the debate.
+        The paper reports that personalized GPT-4 was the most persuasive opponent.
+      </p>
+      <p>
+        <strong>File.</strong> <a href="practice-data/ai-persuasion-debates.csv">ai-persuasion-debates.csv</a> (one row per participant, 750 rows: the paper&rsquo;s analyzed sample)
+      </p>
+      <table>
+        <thead><tr><th>Variable</th><th>What it is</th></tr></thead>
+        <tbody>
+          <tr><td><code>opponent</code>, <code>personalized</code></td><td>The two manipulated factors: <code>human</code>/<code>gpt4</code> and <code>no</code>/<code>yes</code> (also combined in <code>treatmentType</code>)</td></tr>
+          <tr><td><code>agreementPreTreatment</code>, <code>agreementPostTreatment</code></td><td>Agreement with the proposition before and after (1&ndash;5)</td></tr>
+          <tr><td><code>sideAgreementPreTreatment</code>, <code>sideAgreementPostTreatment</code></td><td>The same, recoded as agreement with the opponent&rsquo;s side (1&ndash;5)</td></tr>
+          <tr><td><code>shiftTowardOpponent</code></td><td>Post minus pre on the opponent&rsquo;s side (added by us): positive means the participant moved toward their opponent</td></tr>
+          <tr><td><code>perceivedOpponent</code></td><td>Whether the participant thought they debated a human or an AI</td></tr>
+          <tr><td><code>side</code>, <code>topic</code>, <code>topicPrior</code></td><td>Assigned side (Pro/Con), the proposition, and prior exposure to it (1&ndash;5)</td></tr>
+          <tr><td>Demographics</td><td><code>gender</code>, <code>age</code>, <code>ethnicity</code>, <code>education</code>, <code>employmentStatus</code>, <code>politicalAffiliation</code></td></tr>
+          <tr><td>Debate text</td><td><code>argument</code>, <code>rebuttal</code>, <code>conclusion</code> and the opponent&rsquo;s versions</td></tr>
+        </tbody>
+      </table>
+      <p>
+        <strong>Things to try.</strong> A two-way ANOVA of opponent &times; personalized on <code>shiftTowardOpponent</code>;
+        a paired comparison of pre and post agreement; &chi;&sup2; on <code>opponent</code> &times; <code>perceivedOpponent</code>
+        (how often could people tell?).
+      </p>
+      <p>
+        <strong>Watch for.</strong> In human&ndash;human debates both participants can appear, linked by <code>debateID</code>,
+        so those rows are not independent; the paper handles this in its models. The outcomes are single 5-point items, so there is
+        no scale to build. The paper&rsquo;s own analysis is an ordinal regression, so your numbers will differ from its odds ratios.
+        In September 2026 the authors published a <a href="https://doi.org/10.1038/s41562-026-02588-0">correction</a>: the personalized
+        vs. non-personalized GPT-4 difference is P = .068, not .04. That is worth reading before you write up a result.
+      </p>
+    </section>
+
+    <section>
+      <h2>Q1. Creative professionals on working with AI (qualitative)</h2>
+      <p>
+        Anthropic (2025), &ldquo;<a href="https://www.anthropic.com/research/anthropic-interviewer">Introducing Anthropic Interviewer: What 1,250 professionals told us about working with AI</a>.&rdquo;
+        Data: <a href="https://huggingface.co/datasets/Anthropic/AnthropicInterviewer">Hugging Face</a>, CC-BY; participants consented to public release.
+      </p>
+      <p>
+        <strong>The data.</strong> Ten text interviews, 10&ndash;15 minutes each, with creative professionals (a music producer, a choreographer,
+        a graphic designer, a fiction writer, a screenwriter, a shoe painter, a copywriter, a game writer, a podcaster, and a photographer)
+        about how AI fits into their work. About 8,000 words of participant text in all.
+        <a href="practice-data/ai-creatives-interviews.zip">ai-creatives-interviews.zip</a>
+      </p>
+      <p>
+        <strong>A question to code toward.</strong> How do creative professionals negotiate control, authorship, and other people&rsquo;s
+        judgment when they use AI? Compare your themes with those in Anthropic&rsquo;s report.
+      </p>
+      <p>
+        <strong>Watch for.</strong> The interviewer was Claude, following a rubric that researchers wrote, so its probes are short and
+        sometimes leading; notice how that shapes the answers. A 2026 study re-identified some participants in this dataset, so please
+        do not try to work out who anyone is.
+      </p>
+    </section>
+
+    <section>
+      <h2>Q2. Cancer-care staff on AI (qualitative)</h2>
+      <p>
+        Luke Bearup (2026), &ldquo;Artificial Intelligence in Digital Health: Understanding the perspectives of healthcare staff working to treat cancer,&rdquo;
+        Harvard Dataverse. <a href="https://doi.org/10.7910/DVN/YSMLKW">doi:10.7910/DVN/YSMLKW</a>, CC0.
+      </p>
+      <p>
+        <strong>The data.</strong> Six interviews (about 3,000&ndash;4,000 words each) conducted in 2025 by a human researcher with staff at a
+        specialist cancer centre in Australia: a nurse, a clinician researcher, a director, a pharmacist, someone in allied-health clinical informatics,
+        and a data-science manager. The interview asks about the challenges of diagnosing and treating cancer, their thoughts on AI, and any guidance
+        they have received on using it. Names are pseudonyms; identifying details are redacted.
+        <a href="practice-data/clinician-ai-interviews.zip">clinician-ai-interviews.zip</a> (the full 21 are at the DOI)
+      </p>
+      <p>
+        <strong>A question to code toward.</strong> How do cancer-care staff think about trust, responsibility, and the division of work
+        between clinicians and AI? There is no paper from this dataset yet, so compare your themes with a classmate&rsquo;s instead.
+      </p>
+      <p>
+        <strong>Watch for.</strong> Six transcripts is a lot to code in one pass; focusing on the AI questions (from &ldquo;what are your
+        thoughts on AI?&rdquo; onward) is fine, as long as you say so in your Data &amp; scope section.
+      </p>
+    </section>
+  </main>
+
+  <footer class="site-footer">
+    <div class="wrap">
+      <p>
+        CS / Psych / EdPsych 770 &middot; Human-Computer Interaction &middot; Fall 2026<br>
+        <a href="https://bmutlu.github.io">Prof. Bilge Mutlu</a> &middot;
+        <a href="https://www.cs.wisc.edu/">Department of Computer Sciences</a>,
+        University of Wisconsin&ndash;Madison
+      </p>
+    </div>
+  </footer>
+</body>
+</html>
