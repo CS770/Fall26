@@ -1,0 +1,194 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Cohen&rsquo;s &kappa; calculator — CS 770 · Fall 2026</title>
+  <meta name="description" content="Paste two coders' codes, one row per segment, and get Cohen's kappa. Runs in your browser; nothing is uploaded.">
+  <script>
+    (function () {
+      try {
+        var t = localStorage.getItem('cs770-theme');
+        if (t === 'light' || t === 'dark') document.documentElement.setAttribute('data-theme', t);
+      } catch (e) {}
+    })();
+  </script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400..700&family=Newsreader:ital,opsz,wght@0,6..72,400..600;1,6..72,400..500&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+  <script src="theme.js" defer></script>
+  <style>
+    #codes { width: 100%; min-height: 16em; font: 0.95rem/1.5 ui-monospace, Menlo, monospace; padding: 0.6em; background: var(--surface); color: var(--text); border: 1px solid var(--border); border-radius: var(--radius); box-sizing: border-box; }
+    .controls { margin: 0.6em 0 1.2em; display: flex; gap: 1.2em; flex-wrap: wrap; align-items: center; }
+    .controls button { font: inherit; padding: 0.35em 1em; border-radius: 6px; border: 1px solid var(--border); background: var(--surface-2); color: var(--text); cursor: pointer; }
+    .kappa-big { font-family: var(--display); font-size: 2.4rem; margin: 0.2em 0; }
+    .err { color: var(--link); }
+    table.ct { border-collapse: collapse; margin: 0.6em 0 1.2em; font-size: 0.95rem; }
+    table.ct th, table.ct td { border: 1px solid var(--border); padding: 0.3em 0.6em; text-align: center; }
+    table.ct th { background: var(--surface); font-weight: 600; }
+    table.ct td.diag { background: var(--surface-2); font-weight: 600; }
+    table.ct th.row { text-align: left; }
+  </style>
+</head>
+<body>
+  <header class="site-header">
+    <div class="wrap">
+      <p class="course-num">CS / Psych / EdPsych 770</p>
+      <h1>Cohen&rsquo;s &kappa; calculator</h1>
+      <p class="meta">
+        Fall 2026 &middot; <strong><a href="https://bmutlu.github.io">Prof. Bilge Mutlu</a></strong> &middot;
+        University of Wisconsin&ndash;Madison<br>
+        Two coders, one code per segment. Runs in your browser; nothing you paste is uploaded.
+      </p>
+      <nav class="site-nav" aria-label="Primary">
+        <a href="index.html">Home</a>
+        <a href="schedule.html">Schedule &amp; Readings</a>
+        <a href="syllabus.html">Syllabus</a>
+        <a href="practice-data.html">Practice data</a>
+        <a class="external" href="https://canvas.wisc.edu/courses/527593" target="_blank" rel="noopener">Canvas</a>
+        <button class="theme-toggle" onclick="__cs770cycle()">◐ Auto</button>
+      </nav>
+    </div>
+  </header>
+
+  <main class="syllabus">
+    <section>
+      <h2>Paste your codes</h2>
+      <p>One row per segment: Coder 1&rsquo;s code, then Coder 2&rsquo;s. Codes can be names or numbers. Copy two columns straight from a Google Doc table or a spreadsheet (tab-separated), or type them with a comma between. Leave a cell empty when a coder gave that segment no code.</p>
+      <textarea id="codes" spellcheck="false" placeholder="Frustration&#9;Frustration
+Workaround&#9;Frustration
+Trust&#9;Trust
+Abandonment&#9;Abandonment"></textarea>
+      <div class="controls">
+        <button type="button" id="go">Compute &kappa;</button>
+        <label><input type="checkbox" id="header"> First row is a header</label>
+        <label><input type="checkbox" id="caseins" checked> Ignore capitalization</label>
+      </div>
+      <div id="out" aria-live="polite"></div>
+    </section>
+
+    <section>
+      <h2>Notes</h2>
+      <ul>
+        <li><strong>One code per segment.</strong> Cohen&rsquo;s &kappa; assumes each coder picks exactly one code per segment. If you allow several, compute &kappa; per code instead: a column of yes/no for each coder.</li>
+        <li><strong>Spelling counts.</strong> &ldquo;Workaround&rdquo; and &ldquo;Work-around&rdquo; are different codes here. Agree on code names from the codebook first.</li>
+        <li><strong>&kappa; = (P(a) &minus; P(e)) / (1 &minus; P(e))</strong>: observed agreement corrected for the agreement you&rsquo;d expect by chance, given how often each coder used each code.</li>
+        <li><strong>Bands</strong> (Landis &amp; Koch, 1977): below 0 poor, .00&ndash;.20 slight, .21&ndash;.40 fair, .41&ndash;.60 moderate, .61&ndash;.80 substantial, .81&ndash;1.00 almost perfect.</li>
+      </ul>
+    </section>
+  </main>
+
+  <footer class="site-footer">
+    <div class="wrap">
+      <p>
+        CS / Psych / EdPsych 770 &middot; Human-Computer Interaction &middot; Fall 2026<br>
+        <a href="https://bmutlu.github.io">Prof. Bilge Mutlu</a> &middot;
+        <a href="https://www.cs.wisc.edu/">Department of Computer Sciences</a>,
+        University of Wisconsin&ndash;Madison
+      </p>
+    </div>
+  </footer>
+
+  <script>
+  (function () {
+    var NONE = '(no code)';
+    function esc(s) { return String(s).replace(/[&<>"]/g, function (c) { return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]; }); }
+    function band(k) {
+      if (k < 0) return 'poor';
+      if (k <= 0.20) return 'slight';
+      if (k <= 0.40) return 'fair';
+      if (k <= 0.60) return 'moderate';
+      if (k <= 0.80) return 'substantial';
+      return 'almost perfect';
+    }
+    function f2(x) { return x.toFixed(2).replace(/^(-?)0\./, '$1.'); }
+
+    function parse(text, skipHeader, caseIns) {
+      var lines = text.replace(/\r/g, '').split('\n');
+      var pairs = [], bad = [], display = {};
+      var first = true;
+      for (var i = 0; i < lines.length; i++) {
+        var line = lines[i];
+        if (!line.trim()) continue;
+        if (first && skipHeader) { first = false; continue; }
+        first = false;
+        var parts = line.indexOf('\t') >= 0 ? line.split('\t') : line.split(',');
+        if (parts.length < 2) { bad.push(i + 1); continue; }
+        var a = parts[0].trim(), b = parts[1].trim();
+        if (!a && !b) continue;
+        var ka = a ? (caseIns ? a.toLowerCase() : a) : NONE;
+        var kb = b ? (caseIns ? b.toLowerCase() : b) : NONE;
+        if (!(ka in display)) display[ka] = a || NONE;
+        if (!(kb in display)) display[kb] = b || NONE;
+        pairs.push({ a: ka, b: kb, line: i + 1 });
+      }
+      return { pairs: pairs, bad: bad, display: display };
+    }
+
+    function compute(pairs) {
+      var n = pairs.length, agree = 0, ca = {}, cb = {}, cats = [], m = {};
+      pairs.forEach(function (p) {
+        if (p.a === p.b) agree++;
+        ca[p.a] = (ca[p.a] || 0) + 1;
+        cb[p.b] = (cb[p.b] || 0) + 1;
+        [p.a, p.b].forEach(function (c) { if (cats.indexOf(c) < 0) cats.push(c); });
+        var key = p.a + '\u0000' + p.b;
+        m[key] = (m[key] || 0) + 1;
+      });
+      var po = agree / n, pe = 0;
+      cats.forEach(function (c) { pe += ((ca[c] || 0) / n) * ((cb[c] || 0) / n); });
+      var kappa = pe === 1 ? NaN : (po - pe) / (1 - pe);
+      return { n: n, po: po, pe: pe, kappa: kappa, cats: cats, m: m };
+    }
+
+    function run() {
+      var out = document.getElementById('out');
+      var text = document.getElementById('codes').value;
+      var hdr = document.getElementById('header');
+      var lines = text.split('\n').filter(function (l) { return l.trim(); });
+      if (lines.length && /coder|rater/i.test(lines[0]) && !hdr.dataset.touched) hdr.checked = true;
+      var p = parse(text, hdr.checked, document.getElementById('caseins').checked);
+      if (p.pairs.length < 2) { out.innerHTML = '<p class="err">Paste at least two rows, each with two codes.</p>'; return; }
+      var r = compute(p.pairs), d = p.display;
+      var html = '';
+      if (isNaN(r.kappa)) {
+        html += '<p class="kappa-big">&kappa; undefined</p><p>Both coders used one and the same code for every segment, so chance agreement is 100%. Percent agreement is ' + Math.round(r.po * 100) + '%.</p>';
+      } else {
+        html += '<p class="kappa-big">&kappa; = ' + f2(r.kappa) + '</p>';
+        html += '<p><strong>' + band(r.kappa) + '</strong> agreement (Landis &amp; Koch) &middot; ' + r.n + ' segments &middot; ' +
+          'observed agreement P(a) = ' + f2(r.po) + ' (' + Math.round(r.po * 100) + '%) &middot; chance agreement P(e) = ' + f2(r.pe) + '</p>';
+      }
+      if (p.bad.length) html += '<p class="err">Skipped line' + (p.bad.length > 1 ? 's ' : ' ') + p.bad.join(', ') + ': only one code found. Separate the two codes with a tab or a comma.</p>';
+
+      var cats = r.cats.slice().sort(function (x, y) { return x === NONE ? 1 : y === NONE ? -1 : d[x].localeCompare(d[y]); });
+      html += '<h3>Who coded what</h3><div class="table-scroll"><table class="ct"><tr><th class="row">Coder 1 &darr; &nbsp; Coder 2 &rarr;</th>';
+      cats.forEach(function (c) { html += '<th>' + esc(d[c]) + '</th>'; });
+      html += '</tr>';
+      cats.forEach(function (ra) {
+        html += '<tr><th class="row">' + esc(d[ra]) + '</th>';
+        cats.forEach(function (cb) {
+          var v = r.m[ra + '\u0000' + cb] || '';
+          html += '<td' + (ra === cb ? ' class="diag"' : '') + '>' + v + '</td>';
+        });
+        html += '</tr>';
+      });
+      html += '</table></div>';
+
+      var dis = p.pairs.filter(function (x) { return x.a !== x.b; });
+      if (dis.length) {
+        html += '<h3>Disagreements to discuss (' + dis.length + ')</h3><ul>';
+        dis.forEach(function (x, i) {
+          html += '<li>Line ' + x.line + ': ' + esc(d[x.a]) + ' vs. ' + esc(d[x.b]) + '</li>';
+        });
+        html += '</ul>';
+      }
+      out.innerHTML = html;
+    }
+
+    document.getElementById('go').addEventListener('click', run);
+    document.getElementById('header').addEventListener('change', function () { this.dataset.touched = '1'; });
+  })();
+  </script>
+</body>
+</html>
