@@ -55,7 +55,7 @@
   <main class="syllabus">
     <section>
       <h2>Paste your codes</h2>
-      <p>One row per segment: Coder 1&rsquo;s code, then Coder 2&rsquo;s. Codes can be names or numbers. Copy two columns straight from a Google Doc table or a spreadsheet (tab-separated), or type them with a comma between. Leave a cell empty when a coder gave that segment no code.</p>
+      <p>One row per segment: Coder 1&rsquo;s code, then Coder 2&rsquo;s. Codes can be names or numbers. Copy two columns straight from a Google Doc table or a spreadsheet (tab-separated), or type them with a space or comma between (use a comma if a code name has spaces in it). Leave a cell empty when a coder gave that segment no code.</p>
       <textarea id="codes" spellcheck="false" placeholder="Frustration&#9;Frustration
 Workaround&#9;Frustration
 Trust&#9;Trust
@@ -113,7 +113,12 @@ Abandonment&#9;Abandonment"></textarea>
         if (!line.trim()) continue;
         if (first && skipHeader) { first = false; continue; }
         first = false;
-        var parts = line.indexOf('\t') >= 0 ? line.split('\t') : line.split(',');
+        var parts;
+        if (line.indexOf('\t') >= 0) parts = line.split('\t');
+        else if (line.indexOf(',') >= 0) parts = line.split(',');
+        else if (/\S\s{2,}\S/.test(line)) parts = line.trim().split(/\s{2,}/);
+        else parts = line.trim().split(/\s+/);
+        if (parts.length !== 2 && !(line.indexOf('\t') >= 0 || line.indexOf(',') >= 0)) { bad.push(i + 1); continue; }
         if (parts.length < 2) { bad.push(i + 1); continue; }
         var a = parts[0].trim(), b = parts[1].trim();
         if (!a && !b) continue;
@@ -159,7 +164,12 @@ Abandonment&#9;Abandonment"></textarea>
         html += '<p><strong>' + band(r.kappa) + '</strong> agreement (Landis &amp; Koch) &middot; ' + r.n + ' segments &middot; ' +
           'observed agreement P(a) = ' + f2(r.po) + ' (' + Math.round(r.po * 100) + '%) &middot; chance agreement P(e) = ' + f2(r.pe) + '</p>';
       }
-      if (p.bad.length) html += '<p class="err">Skipped line' + (p.bad.length > 1 ? 's ' : ' ') + p.bad.join(', ') + ': only one code found. Separate the two codes with a tab or a comma.</p>';
+      if (!isNaN(r.kappa)) {
+        var used = function (k) { return r.cats.filter(function (c) { return p.pairs.some(function (x) { return x[k] === c; }); }).length; };
+        var one = used('a') === 1 ? 'Coder 1' : used('b') === 1 ? 'Coder 2' : '';
+        if (one) html += '<p>' + one + ' used the same code for every segment, so chance alone predicts this much agreement and &kappa; can&rsquo;t rise above 0. Code more varied segments, or check that both coders are using the full codebook.</p>';
+      }
+      if (p.bad.length) html += '<p class="err">Skipped line' + (p.bad.length > 1 ? 's ' : ' ') + p.bad.join(', ') + ': couldn\'t find two codes. If a code name has spaces in it, separate the two codes with a tab or a comma.</p>';
 
       var cats = r.cats.slice().sort(function (x, y) { return x === NONE ? 1 : y === NONE ? -1 : d[x].localeCompare(d[y]); });
       html += '<h3>Who coded what</h3><div class="table-scroll"><table class="ct"><tr><th class="row">Coder 1 &darr; &nbsp; Coder 2 &rarr;</th>';
