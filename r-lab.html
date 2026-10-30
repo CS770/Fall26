@@ -1,0 +1,315 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>R lab · CS 770 · Fall 2026</title>
+  <meta name="description" content="Run the R examples from the CS 770 statistics sessions on the class practice data, in your browser. Nothing to install; nothing is uploaded.">
+  <script>
+    (function () {
+      try {
+        var t = localStorage.getItem('cs770-theme');
+        if (t === 'light' || t === 'dark') document.documentElement.setAttribute('data-theme', t);
+      } catch (e) {}
+    })();
+  </script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400..700&family=Newsreader:ital,opsz,wght@0,6..72,400..600;1,6..72,400..500&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+  <script src="theme.js" defer></script>
+  <style>
+    .lab-bar { display: flex; flex-wrap: wrap; gap: 0.8em 1.2em; align-items: center; margin: 0.4em 0 0.8em; }
+    .lab-bar select { font: inherit; padding: 0.3em 0.5em; border-radius: 6px; border: 1px solid var(--border); background: var(--surface); color: var(--text); max-width: 100%; }
+    .lab-bar button, .file-label { font: inherit; padding: 0.35em 1em; border-radius: 6px; border: 1px solid var(--border); background: var(--surface-2); color: var(--text); cursor: pointer; }
+    .lab-bar button.primary { background: var(--link); border-color: var(--link); color: #fff; }
+    .lab-bar button:disabled { opacity: 0.45; cursor: default; }
+    #code { width: 100%; min-height: 12em; font: 0.9rem/1.5 ui-monospace, Menlo, monospace; padding: 0.7em; background: var(--surface); color: var(--text); border: 1px solid var(--border); border-radius: var(--radius); box-sizing: border-box; tab-size: 2; }
+    #status { font-size: 0.95rem; color: var(--muted, #605b54); margin: 0.2em 0 0.8em; }
+    #status.ready { color: var(--text); }
+    #status.err { color: var(--link); }
+    .slide-ref { font-size: 0.95rem; color: var(--muted, #605b54); margin: 0 0 0.4em; min-height: 1.2em; }
+    #out pre { font: 0.82rem/1.45 ui-monospace, Menlo, monospace; background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); padding: 0.8em; overflow-x: auto; white-space: pre; margin: 0 0 1em; }
+    #out pre.stderr { color: var(--muted, #605b54); }
+    #out pre.error { color: var(--link); white-space: pre-wrap; }
+    #out canvas { max-width: 100%; height: auto; border: 1px solid var(--border); border-radius: var(--radius); background: #fff; margin: 0 0 1em; display: block; }
+    .file-label input { display: none; }
+    kbd { font: 0.8rem ui-monospace, Menlo, monospace; border: 1px solid var(--border); border-radius: 4px; padding: 0 0.3em; }
+  </style>
+</head>
+<body>
+  <header class="site-header">
+    <div class="wrap">
+      <p class="course-num">CS / Psych / EdPsych 770</p>
+      <h1>R lab</h1>
+      <p class="meta">
+        Fall 2026 &middot; <strong><a href="https://bmutlu.github.io">Prof. Bilge Mutlu</a></strong> &middot;
+        University of Wisconsin&ndash;Madison<br>
+        The R examples from the statistics sessions, run on the class practice data. R runs in your browser; nothing to install, and nothing you load is uploaded.
+      </p>
+      <nav class="site-nav" aria-label="Primary">
+        <a href="index.html">Home</a>
+        <a href="schedule.html">Schedule &amp; Readings</a>
+        <a href="syllabus.html">Syllabus</a>
+        <a href="practice-data.html">Practice data</a>
+        <a class="external" href="https://canvas.wisc.edu/courses/527593" target="_blank" rel="noopener">Canvas</a>
+        <button class="theme-toggle" onclick="__cs770cycle()">◐ Auto</button>
+      </nav>
+    </div>
+  </header>
+
+  <main class="syllabus">
+    <section>
+      <p id="status">Starting R&hellip; the first load takes 20&ndash;40 seconds while R and the psych package download.</p>
+      <div class="lab-bar">
+        <label>Example <select id="example"></select></label>
+        <label class="file-label" title="Load a CSV as mydata.csv">Load your CSV<input type="file" id="file" accept=".csv,text/csv"></label>
+      </div>
+      <p class="slide-ref" id="slideref"></p>
+      <textarea id="code" spellcheck="false" aria-label="R code"></textarea>
+      <div class="lab-bar">
+        <button type="button" class="primary" id="run" disabled>Run</button>
+        <button type="button" id="reset">Reset code</button>
+        <span style="font-size:0.9rem; color:var(--muted, #605b54);"><kbd>&#8984;</kbd>/<kbd>Ctrl</kbd> + <kbd>Enter</kbd> runs</span>
+      </div>
+      <div id="out" aria-live="polite"></div>
+    </section>
+
+    <section>
+      <h2>Notes</h2>
+      <ul>
+        <li><strong>The data.</strong> <code>ratings.csv</code> and <code>stories.csv</code> are practice set A (GenAI and story writing: one row per rating, one row per story); <code>debates.csv</code> is practice set B (debating GPT-4, one row per participant). Codebooks are on the <a href="practice-data.html">practice-data page</a>.</li>
+        <li><strong>Edit freely.</strong> Change a variable, add a line, run again. Objects you create stay available until you reload the page; <em>Reset code</em> restores the example.</li>
+        <li><strong>Your own data.</strong> <em>Load your CSV</em> reads the file into this page as <code>mydata.csv</code> and switches to the <em>Your own CSV</em> example. It never leaves your computer.</li>
+        <li><strong>Packages.</strong> <code>psych</code> and <code>GPArotation</code> are loaded. Others from CRAN can be added with <code>webr::install("name")</code>; most are available, and each one adds download time.</li>
+        <li><strong>Same code, real R.</strong> Everything here runs unchanged in R or RStudio on your own computer, with the CSVs from the practice-data page in your working folder.</li>
+      </ul>
+    </section>
+  </main>
+
+  <footer class="site-footer">
+    <div class="wrap">
+      <p>
+        CS / Psych / EdPsych 770 &middot; Human-Computer Interaction &middot; Fall 2026<br>
+        <a href="https://bmutlu.github.io">Prof. Bilge Mutlu</a> &middot;
+        <a href="https://www.cs.wisc.edu/">Department of Computer Sciences</a>,
+        University of Wisconsin&ndash;Madison &middot; R in the browser by <a href="https://docs.r-wasm.org/webr/latest/">webR</a>
+      </p>
+    </div>
+  </footer>
+
+  <script id="examples" type="application/json">[
+ {
+  "group": "Describe",
+  "id": "describe",
+  "title": "describe(): all descriptives",
+  "slide": "Descriptive statistics in R",
+  "code": "library(psych)\ns <- read.csv(\"stories.csv\")   # set A: one row per story (293)\ndescribe(s[c(\"rated_novel\", \"rated_appropriate\", \"story_words\", \"writing_seconds\")])\n"
+ },
+ {
+  "group": "Describe",
+  "id": "describeBy",
+  "title": "describeBy(): descriptives per condition",
+  "slide": "Descriptive statistics in R",
+  "code": "library(psych)\ns <- read.csv(\"stories.csv\")\ndescribeBy(s$rated_novel, group = s$condition, mat = TRUE, digits = 2)\n"
+ },
+ {
+  "group": "Describe",
+  "id": "hist",
+  "title": "hist(): histogram (a skewed one)",
+  "slide": "Distribution",
+  "code": "s <- read.csv(\"stories.csv\")\nhist(s$writing_seconds, breaks = 30, col = \"#C5050C\", border = \"white\",\n     main = \"Writing time per story\", xlab = \"Seconds\")\n"
+ },
+ {
+  "group": "Describe",
+  "id": "density",
+  "title": "density(): density plot",
+  "slide": "Distribution",
+  "code": "s <- read.csv(\"stories.csv\")\nplot(density(s$rated_novel), lwd = 2, col = \"#C5050C\",\n     main = \"Rated novelty (story means)\", xlab = \"Novelty, 1-9\")\n"
+ },
+ {
+  "group": "Describe",
+  "id": "boxplot",
+  "title": "boxplot(): box plot by condition",
+  "slide": "Dispersion",
+  "code": "s <- read.csv(\"stories.csv\")\nboxplot(rated_novel ~ condition, data = s, col = \"#f2d5d6\",\n        xlab = \"\", ylab = \"Rated novelty, 1-9\")\n"
+ },
+ {
+  "group": "Describe",
+  "id": "scatter",
+  "title": "plot() + cor.test(): correlation",
+  "slide": "Correlation as description",
+  "code": "s <- read.csv(\"stories.csv\")\nplot(s$dat_score, s$rated_novel, pch = 19, col = \"#C5050C80\",\n     xlab = \"Creative ability (DAT score)\", ylab = \"Rated novelty, 1-9\")\ncor.test(s$dat_score, s$rated_novel)                                       # Pearson's r\ncor.test(s$dat_score, s$rated_novel, method = \"spearman\", exact = FALSE)   # Spearman's rho\n"
+ },
+ {
+  "group": "Effect sizes",
+  "id": "cohend_b",
+  "title": "cohen.d(): AI vs. human opponent (set B)",
+  "slide": "Effect sizes",
+  "code": "library(psych)\nd <- read.csv(\"debates.csv\")   # set B: one row per participant (750)\nd$opponent <- factor(d$opponent, levels = c(\"human\", \"gpt4\"))   # d = gpt4 minus human\ntable(d$opponent)\nres <- cohen.d(shiftTowardOpponent ~ opponent, data = d)\nround(res$cohen.d, 2)   # d with its 95% CI\n"
+ },
+ {
+  "group": "Effect sizes",
+  "id": "cohend_a",
+  "title": "cohen.d(): five AI ideas vs. none (set A)",
+  "slide": "Effect sizes",
+  "code": "library(psych)\ns <- read.csv(\"stories.csv\")\ntwo <- subset(s, condition %in% c(\"human_only\", \"ai_5_ideas\"))\ntwo$condition <- factor(two$condition, levels = c(\"human_only\", \"ai_5_ideas\"))   # d = AI minus human\nres <- cohen.d(rated_novel ~ condition, data = two)\nround(res$cohen.d, 2)   # d with its 95% CI\n"
+ },
+ {
+  "group": "Effect sizes",
+  "id": "estimate",
+  "title": "The estimation sentence: difference + 95% CI",
+  "slide": "Confidence intervals",
+  "code": "d <- read.csv(\"debates.csv\")\ntt <- t.test(shiftTowardOpponent ~ opponent, data = d)\nm <- tapply(d$shiftTowardOpponent, d$opponent, mean)\nround(m, 2)                                  # group means\ncat(sprintf(\"The difference (gpt4 minus human) is %.2f points, 95%% CI [%.2f, %.2f].\\n\",\n            m[\"gpt4\"] - m[\"human\"], tt$conf.int[1], tt$conf.int[2]))\n"
+ },
+ {
+  "group": "Factor analysis",
+  "id": "parallel",
+  "title": "fa.parallel(): how many factors?",
+  "slide": "How many factors?",
+  "code": "library(psych)\nr <- read.csv(\"ratings.csv\")              # set A: one row per rating (3,519)\nitems <- names(r)[4:15]                   # the 12 rating items\nr$boring <- 10 - r$boring                 # reverse-key\ns <- aggregate(r[items], list(story = r$story_id), mean)   # 293 story means\nset.seed(770)\nfa.parallel(s[items], fm = \"minres\", fa = \"fa\")\n"
+ },
+ {
+  "group": "Factor analysis",
+  "id": "varimax",
+  "title": "fa(): two factors, varimax",
+  "slide": "Reading the loadings",
+  "code": "library(psych)\nr <- read.csv(\"ratings.csv\")              # set A: one row per rating (3,519)\nitems <- names(r)[4:15]                   # the 12 rating items\nr$boring <- 10 - r$boring                 # reverse-key\ns <- aggregate(r[items], list(story = r$story_id), mean)   # 293 story means\nfit <- fa(s[items], nfactors = 2, rotate = \"varimax\", fm = \"minres\")\nprint(fit$loadings, cutoff = .32)\n"
+ },
+ {
+  "group": "Factor analysis",
+  "id": "oblimin",
+  "title": "fa(): two factors, oblimin",
+  "slide": "Rotation",
+  "code": "library(psych)\nr <- read.csv(\"ratings.csv\")              # set A: one row per rating (3,519)\nitems <- names(r)[4:15]                   # the 12 rating items\nr$boring <- 10 - r$boring                 # reverse-key\ns <- aggregate(r[items], list(story = r$story_id), mean)   # 293 story means\nfit <- fa(s[items], nfactors = 2, rotate = \"oblimin\", fm = \"minres\")\nprint(fit$loadings, cutoff = .32)\nround(fit$Phi, 2)            # factor correlation\nround(fit$communality, 2)    # share of each item's variance the factors explain\n"
+ },
+ {
+  "group": "Factor analysis",
+  "id": "alpha",
+  "title": "alpha(): reliability of each scale",
+  "slide": "Build the scales, check alpha",
+  "code": "library(psych)\nr <- read.csv(\"ratings.csv\")              # set A: one row per rating (3,519)\nitems <- names(r)[4:15]                   # the 12 rating items\nr$boring <- 10 - r$boring                 # reverse-key\ns <- aggregate(r[items], list(story = r$story_id), mean)   # 293 story means\nalpha(s[c(\"novel\", \"original\", \"rare\")])                    # novelty, authors' index\nalpha(s[c(\"appropriate\", \"feasible\", \"publishable\")])       # usefulness, authors' index\n"
+ },
+ {
+  "group": "Your data",
+  "id": "mine",
+  "title": "Your own CSV",
+  "slide": "",
+  "code": "library(psych)\nmy <- read.csv(\"mydata.csv\")   # upload a CSV above first\nstr(my)\ndescribe(my)\n"
+ }
+]</script>
+  <script type="module">
+    import { WebR } from 'https://webr.r-wasm.org/v0.6.0/webr.mjs';
+
+    const EX = JSON.parse(document.getElementById('examples').textContent);
+    const $ = (id) => document.getElementById(id);
+    const sel = $('example'), code = $('code'), out = $('out'), status = $('status'), runBtn = $('run');
+    const DATA = { 'ratings.csv': 'practice-data/ai-creativity-ratings.csv',
+                   'stories.csv': 'practice-data/ai-creativity-stories.csv',
+                   'debates.csv': 'practice-data/ai-persuasion-debates.csv' };
+    const HOME = '/home/web_user/';
+
+    // Example menu, grouped
+    const groups = {};
+    EX.forEach((e) => {
+      if (!groups[e.group]) { groups[e.group] = document.createElement('optgroup'); groups[e.group].label = e.group; sel.appendChild(groups[e.group]); }
+      const o = document.createElement('option'); o.value = e.id; o.textContent = e.title; groups[e.group].appendChild(o);
+    });
+    function load(id) {
+      const e = EX.find((x) => x.id === id);
+      sel.value = id; code.value = e.code;
+      $('slideref').textContent = e.slide ? 'On the slides: “' + e.slide + '”' : '';
+      out.innerHTML = '';
+    }
+    sel.addEventListener('change', () => load(sel.value));
+    $('reset').addEventListener('click', () => load(sel.value));
+    const start = new URLSearchParams(location.search).get('ex');
+    load(EX.some((x) => x.id === start) ? start : EX[0].id);
+
+    function setStatus(msg, cls) { status.textContent = msg; status.className = cls || ''; }
+    function pre(text, cls) { const p = document.createElement('pre'); if (cls) p.className = cls; p.textContent = text; out.appendChild(p); }
+
+    const webR = new WebR();
+    let ready = false, busy = false;
+
+    async function boot() {
+      try {
+        setStatus('Starting R… the first load takes 20–40 seconds while R and the psych package download.');
+        await webR.init();
+        setStatus('Loading the psych and GPArotation packages…');
+        await webR.installPackages(['psych', 'GPArotation'], { quiet: true });
+        setStatus('Loading the practice data…');
+        for (const [name, url] of Object.entries(DATA)) {
+          const buf = new Uint8Array(await (await fetch(url)).arrayBuffer());
+          await webR.FS.writeFile(HOME + name, buf);
+        }
+        await webR.evalRVoid('options(mc.cores = 1); suppressPackageStartupMessages(library(psych))');   // no fork() in the browser
+        ready = true; runBtn.disabled = false;
+        setStatus('R is ready. Pick an example and press Run.', 'ready');
+      } catch (err) {
+        setStatus('R could not start: ' + err.message + '. Try reloading the page.', 'err');
+      }
+    }
+
+    async function run() {
+      if (!ready || busy) return;
+      busy = true; runBtn.disabled = true; out.innerHTML = '';
+      setStatus('Running…', 'ready');
+      const shelter = await new webR.Shelter();
+      try {
+        const res = await shelter.captureR(code.value, {
+          withAutoprint: true, captureStreams: true, captureConditions: false,
+          captureGraphics: { width: 840, height: 520, pointsize: 14, bg: 'white' },
+        });
+        let buf = [], kind = null;
+        let failed = false;
+        const flush = () => {
+          if (!buf.length) return;
+          const text = buf.join('\n');
+          const isErr = kind === 'stderr' && /^Error/m.test(text);
+          if (isErr) failed = true;
+          pre(text, kind === 'stderr' ? (isErr ? 'error' : 'stderr') : '');
+          buf = [];
+        };
+        for (const o of res.output) {
+          if (o.type !== kind) { flush(); kind = o.type; }
+          buf.push(o.data);
+        }
+        flush();
+        for (const img of res.images) {
+          const c = document.createElement('canvas');
+          c.width = img.width; c.height = img.height;
+          c.getContext('2d').drawImage(img, 0, 0);
+          out.appendChild(c);
+        }
+        if (!res.output.length && !res.images.length) pre('(done, no output)', 'stderr');
+        if (failed) setStatus('R reported an error; see below.', 'err');
+        else setStatus('R is ready. Pick an example and press Run.', 'ready');
+      } catch (err) {
+        pre('Error: ' + err.message, 'error');
+        setStatus('R reported an error; see below.', 'err');
+      } finally {
+        await shelter.purge();
+        busy = false; runBtn.disabled = false;
+      }
+    }
+
+    runBtn.addEventListener('click', run);
+    code.addEventListener('keydown', (e) => {
+      if ((e.metaKey || e.ctrlKey) && e.key === 'Enter') { e.preventDefault(); run(); }
+      if (e.key === 'Tab') { e.preventDefault(); const s = code.selectionStart; code.setRangeText('  ', s, code.selectionEnd, 'end'); }
+    });
+
+    $('file').addEventListener('change', async (e) => {
+      const f = e.target.files[0]; if (!f) return;
+      if (!ready) { setStatus('Wait for R to finish loading, then load the file again.', 'err'); e.target.value = ''; return; }
+      await webR.FS.writeFile(HOME + 'mydata.csv', new Uint8Array(await f.arrayBuffer()));
+      load('mine');
+      setStatus('Loaded ' + f.name + ' as mydata.csv. Press Run.', 'ready');
+      e.target.value = '';
+    });
+
+    boot();
+  </script>
+</body>
+</html>
