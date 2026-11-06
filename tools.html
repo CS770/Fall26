@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Tools &amp; Data — CS 770 · Fall 2026</title>
+  <meta name="description" content="Every tool, dataset, and worksheet built for CS 770's qualitative and quantitative methods sessions, in one place.">
+  <script>
+    (function () {
+      try {
+        var t = localStorage.getItem('cs770-theme');
+        if (t === 'light' || t === 'dark') document.documentElement.setAttribute('data-theme', t);
+      } catch (e) {}
+    })();
+  </script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400..700&family=Newsreader:ital,opsz,wght@0,6..72,400..600;1,6..72,400..500&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+  <script src="theme.js" defer></script>
+</head>
+<body>
+  <header class="site-header">
+    <div class="wrap">
+      <p class="course-num">CS / Psych / EdPsych 770</p>
+      <h1>Tools &amp; Data</h1>
+      <p class="meta">
+        Fall 2026 &middot; <strong><a href="https://bmutlu.github.io">Prof. Bilge Mutlu</a></strong> &middot;
+        University of Wisconsin&ndash;Madison<br>
+        Everything built for the methods sessions, for your project and the methods assignments
+      </p>
+      <nav class="site-nav" aria-label="Primary">
+        <a href="index.html">Home</a>
+        <a href="schedule.html">Schedule &amp; Readings</a>
+        <a href="syllabus.html">Syllabus</a>
+        <a href="tools.html" aria-current="page">Tools &amp; Data</a>
+        <a class="external" href="https://canvas.wisc.edu/courses/527593" target="_blank" rel="noopener">Canvas</a>
+        <a class="external" href="mailto:hci-class@cs.wisc.edu">Email</a>
+        <button class="theme-toggle" onclick="__cs770cycle()">◐ Auto</button>
+      </nav>
+    </div>
+  </header>
+
+  <main class="syllabus">
+    <section>
+      <p class="lede">
+        The tools on this page run in your browser: nothing to install, and nothing you paste or load is uploaded.
+        The practice data come from published human-AI studies, so you can check your analysis against the paper.
+        If your project doesn&rsquo;t have the data a method needs, start with <a href="practice-data.html">Practice data</a>.
+      </p>
+    </section>
+
+    <section id="data">
+      <h2>Practice data</h2>
+      <p>Openly licensed, each with a codebook on the <a href="practice-data.html">practice-data page</a>. Pick one quantitative set and stay with it across the statistics assignments.</p>
+      <table>
+        <thead><tr><th>Set</th><th>What it is</th><th>Files</th></tr></thead>
+        <tbody>
+          <tr>
+            <td><a href="practice-data.html#setA"><strong>A</strong>. Generative AI and story writing</a><br>quantitative</td>
+            <td>Doshi &amp; Hauser (2024). 293 stories written alone, with one AI idea, or with five; about 12 ratings per story on 1&ndash;9 scales; writers&rsquo; creative ability.</td>
+            <td><a href="practice-data/ai-creativity-stories.csv">stories</a> &middot; <a href="practice-data/ai-creativity-ratings.csv">ratings</a></td>
+          </tr>
+          <tr>
+            <td><a href="practice-data.html#setB"><strong>B</strong>. Debating GPT-4</a><br>quantitative</td>
+            <td>Salvi et al. (2025). 750 participants debated a person or GPT-4, personalized or not (2 &times; 2); agreement before and after.</td>
+            <td><a href="practice-data/ai-persuasion-debates.csv">debates</a></td>
+          </tr>
+          <tr>
+            <td><a href="practice-data.html#q1"><strong>Q1</strong>. Creative professionals on AI</a><br>qualitative</td>
+            <td>Anthropic Interviewer (2025). Ten text interviews with creative professionals about AI in their work.</td>
+            <td><a href="practice-data/ai-creatives-interviews.zip">interviews (zip)</a></td>
+          </tr>
+          <tr>
+            <td><a href="practice-data.html#q2"><strong>Q2</strong>. Cancer-care staff on AI</a><br>qualitative</td>
+            <td>Bearup (2026). Six interviews with staff at a specialist cancer centre about trust, responsibility, and AI.</td>
+            <td><a href="practice-data/clinician-ai-interviews.zip">interviews (zip)</a></td>
+          </tr>
+        </tbody>
+      </table>
+    </section>
+
+    <section id="qual">
+      <h2>Qualitative analysis</h2>
+      <table>
+        <thead><tr><th>Resource</th><th>What it does</th><th>From</th></tr></thead>
+        <tbody>
+          <tr>
+            <td><a href="kappa.html">&kappa; calculator</a></td>
+            <td>Paste two coders&rsquo; codes, one row per segment. You get Cohen&rsquo;s &kappa;, a table of who coded what, and the disagreements to discuss.</td>
+            <td class="num">Oct 23</td>
+          </tr>
+          <tr>
+            <td><a href="practice-data/w08-codebook-template.csv">Codebook template</a> (CSV)</td>
+            <td>One row per coded segment: the text, its in-vivo code, the concept label, and who coded it. The first three rows are a worked example; delete them before use.</td>
+            <td class="num">Oct 23</td>
+          </tr>
+          <tr>
+            <td><a href="https://docs.google.com/document/d/15_rJfCjVLmmW6Q0_AZthJ7uWnPM-ndEO/edit?usp=sharing&amp;rtpof=true&amp;sd=true">Open-coding worksheet</a> (Google Doc)</td>
+            <td>Open-code a transcript as a pod, then compare codes. File &rarr; Make a copy.</td>
+            <td class="num">Oct 23</td>
+          </tr>
+        </tbody>
+      </table>
+    </section>
+
+    <section id="quant">
+      <h2>Quantitative analysis</h2>
+      <table>
+        <thead><tr><th>Resource</th><th>What it does</th><th>From</th></tr></thead>
+        <tbody>
+          <tr>
+            <td><a href="r-lab.html">R lab</a></td>
+            <td>Every R example from the statistics sessions, ready to run on sets A and B: descriptives, plots, correlation, effect sizes with CIs, factor analysis and alpha, &chi;&sup2;, <em>t</em>-tests, ANOVA, and regression (linear, logistic, mixed). Edit the code, or load your own CSV.</td>
+            <td class="num">Oct 30, Nov 6</td>
+          </tr>
+          <tr>
+            <td><a href="test-picker.html">Test picker</a></td>
+            <td>Answer a few questions about one hypothesis and get the test, the effect size to report, the assumptions to check, what to do if they fail, and the R lab example that runs it.</td>
+            <td class="num">Nov 6</td>
+          </tr>
+          <tr>
+            <td><a href="practice-data/ai-creativity-factor-analysis.R">Factor analysis script</a> (R)</td>
+            <td>Set A from items to scales: reverse-keying, parallel analysis, rotation, loadings, scale scores, and Cronbach&rsquo;s alpha, with comments.</td>
+            <td class="num">Oct 30</td>
+          </tr>
+          <tr>
+            <td><a href="https://docs.google.com/document/d/15rlMRmh3y_UMPVpvJoQ9A8DkAJNmvaZM/edit?usp=sharing&amp;rtpof=true&amp;sd=true">Describe before you test</a> (Google Doc)</td>
+            <td>Worksheet: descriptives, a distribution plot, and one effect size with its CI.</td>
+            <td class="num">Oct 30</td>
+          </tr>
+          <tr>
+            <td><a href="https://docs.google.com/document/d/1cDGju3aWgB5_6bwI2chATjFBpp9xUePk/edit?usp=sharing&amp;rtpof=true&amp;sd=true">Pick the test, run one</a> (Google Doc)</td>
+            <td>Worksheet: hypotheses to tests, assumptions and effect sizes, then one test run and written up.</td>
+            <td class="num">Nov 6</td>
+          </tr>
+        </tbody>
+      </table>
+    </section>
+
+    <section id="design">
+      <h2>Planning a study</h2>
+      <table>
+        <thead><tr><th>Resource</th><th>What it does</th><th>From</th></tr></thead>
+        <tbody>
+          <tr>
+            <td><a href="design-decision.html">Experimental design guide</a></td>
+            <td>The seven steps of experimental design, one decision at a time; collects what you write into a draft plan. A <a href="design-guide-overview.html">one-page overview</a> prints.</td>
+            <td class="num">Oct 9</td>
+          </tr>
+          <tr>
+            <td><a class="external" href="https://www.psychologie.hhu.de/arbeitsgruppen/allgemeine-psychologie-und-arbeitspsychologie/gpower" target="_blank" rel="noopener">G*Power</a></td>
+            <td>Free power analysis for Mac and Windows: the sample size you need for a given effect size, &alpha;, and power. In R, the <code>pwr</code> package does the same.</td>
+            <td class="num">Oct 16</td>
+          </tr>
+        </tbody>
+      </table>
+    </section>
+  </main>
+
+  <footer class="site-footer">
+    <div class="wrap">
+      <p>
+        CS / Psych / EdPsych 770 &middot; Human-Computer Interaction &middot; Fall 2026<br>
+        <a href="https://bmutlu.github.io">Prof. Bilge Mutlu</a> &middot;
+        <a href="https://www.cs.wisc.edu/">Department of Computer Sciences</a>,
+        University of Wisconsin&ndash;Madison
+      </p>
+    </div>
+  </footer>
+</body>
+</html>

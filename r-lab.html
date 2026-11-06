@@ -51,7 +51,7 @@
         <a href="index.html">Home</a>
         <a href="schedule.html">Schedule &amp; Readings</a>
         <a href="syllabus.html">Syllabus</a>
-        <a href="practice-data.html">Practice data</a>
+        <a href="tools.html">Tools &amp; Data</a>
         <a class="external" href="https://canvas.wisc.edu/courses/527593" target="_blank" rel="noopener">Canvas</a>
         <button class="theme-toggle" onclick="__cs770cycle()">◐ Auto</button>
       </nav>
@@ -79,9 +79,10 @@
       <h2>Notes</h2>
       <ul>
         <li><strong>The data.</strong> <code>ratings.csv</code> and <code>stories.csv</code> are practice set A (GenAI and story writing: one row per rating, one row per story); <code>debates.csv</code> is practice set B (debating GPT-4, one row per participant). Codebooks are on the <a href="practice-data.html">practice-data page</a>.</li>
+        <li><strong>Not sure which test?</strong> The <a href="test-picker.html">test picker</a> asks about your outcome and design, then points to the example here that runs it.</li>
         <li><strong>Edit freely.</strong> Change a variable, add a line, run again. Objects you create stay available until you reload the page; <em>Reset code</em> restores the example.</li>
         <li><strong>Your own data.</strong> <em>Load your CSV</em> reads the file into this page as <code>mydata.csv</code> and switches to the <em>Your own CSV</em> example. It never leaves your computer.</li>
-        <li><strong>Packages.</strong> <code>psych</code> and <code>GPArotation</code> are loaded. Others from CRAN can be added with <code>webr::install("name")</code>; most are available, and each one adds download time.</li>
+        <li><strong>Packages.</strong> <code>psych</code> and <code>GPArotation</code> are loaded; <code>lme4</code> installs the first time an example calls <code>library(lme4)</code>. Others from CRAN can be added with <code>webr::install("name")</code>; most are available, and each one adds download time.</li>
         <li><strong>Same code, real R.</strong> Everything here runs unchanged in R or RStudio on your own computer, with the CSVs from the practice-data page in your working folder.</li>
       </ul>
     </section>
@@ -191,6 +192,83 @@
   "code": "library(psych)\nr <- read.csv(\"ratings.csv\")              # set A: one row per rating (3,519)\nitems <- names(r)[4:15]                   # the 12 rating items\nr$boring <- 10 - r$boring                 # reverse-key\ns <- aggregate(r[items], list(story = r$story_id), mean)   # 293 story means\nalpha(s[c(\"novel\", \"original\", \"rare\")])                    # novelty, authors' index\nalpha(s[c(\"appropriate\", \"feasible\", \"publishable\")])       # usefulness, authors' index\n"
  },
  {
+  "group": "Compare groups",
+  "id": "chisq_b",
+  "title": "chisq.test(): could people tell it was GPT-4? (set B)",
+  "slide": "Could people tell they were debating GPT-4?",
+  "code": "d <- read.csv(\"debates.csv\")   # set B: one row per participant (750)\ntab <- table(opponent = d$opponent, thought = d$perceivedOpponent)\ntab                            # rows: who they debated; columns: who they thought it was\nround(prop.table(tab, 1), 2)   # row proportions\nchisq.test(tab)                # 2 x 2, so R applies Yates' continuity correction\nres <- chisq.test(tab, correct = FALSE)\nsqrt(unname(res$statistic) / sum(tab))   # effect size: phi (= Cramer's V for a 2 x 2)\n# Caution: in human-human debates both people can appear (same debateID), so rows are not fully independent.\n"
+ },
+ {
+  "group": "Compare groups",
+  "id": "chisq_a",
+  "title": "chisq.test(): more ideas offered, more asking? (set A)",
+  "slide": "Could people tell they were debating GPT-4?",
+  "code": "s <- read.csv(\"stories.csv\")   # set A: one row per story (293)\nai <- subset(s, condition != \"human_only\")   # only the AI conditions could ask for an idea\ntab <- table(condition = ai$condition, asked = ai$requested_ai_idea)\ntab\nround(prop.table(tab, 1), 2)\nchisq.test(tab)\nres <- chisq.test(tab, correct = FALSE)\nsqrt(unname(res$statistic) / sum(tab))   # phi\n"
+ },
+ {
+  "group": "Compare groups",
+  "id": "ttest_a",
+  "title": "t.test(): five AI ideas vs. none (set A)",
+  "slide": "Unpaired t: do five AI ideas raise novelty?",
+  "code": "library(psych)\ns <- read.csv(\"stories.csv\")\ns$novelty <- rowMeans(s[c(\"rated_novel\", \"rated_original\", \"rated_rare\")])   # authors' novelty index\ntwo <- subset(s, condition %in% c(\"human_only\", \"ai_5_ideas\"))\ntwo$condition <- factor(two$condition, levels = c(\"human_only\", \"ai_5_ideas\"))\nt.test(novelty ~ condition, data = two)   # Welch's t, R's default: no equal-variance assumption\n                                          # t < 0 because R subtracts in level order: human minus AI\nround(cohen.d(novelty ~ condition, data = two)$cohen.d, 2)   # d = AI minus human, with 95% CI\n"
+ },
+ {
+  "group": "Compare groups",
+  "id": "ttest_paired_b",
+  "title": "t.test(paired = TRUE): before vs. after GPT-4 (set B)",
+  "slide": "Paired t: did a personalized GPT-4 move people?",
+  "code": "d <- read.csv(\"debates.csv\")\ng <- subset(d, opponent == \"gpt4\" & personalized == \"yes\")   # 150 people, same person before and after\nt.test(g$sideAgreementPostTreatment, g$sideAgreementPreTreatment, paired = TRUE)\n# Paired = a one-sample t on the differences; here that difference is shiftTowardOpponent\n"
+ },
+ {
+  "group": "Compare groups",
+  "id": "anova_a",
+  "title": "aov(): one-way ANOVA, novelty by condition (set A)",
+  "slide": "The F-statistic",
+  "code": "s <- read.csv(\"stories.csv\")\ns$novelty <- rowMeans(s[c(\"rated_novel\", \"rated_original\", \"rated_rare\")])\nround(tapply(s$novelty, s$condition, mean), 2)\nm <- aov(novelty ~ condition, data = s)\nsummary(m)\nss <- summary(m)[[1]][[\"Sum Sq\"]]\nround(ss[1] / sum(ss), 3)   # effect size: eta squared\n"
+ },
+ {
+  "group": "Compare groups",
+  "id": "tukey_a",
+  "title": "TukeyHSD(): which conditions differ? (set A)",
+  "slide": "ANOVA tells us whether, not which",
+  "code": "s <- read.csv(\"stories.csv\")\ns$usefulness <- rowMeans(s[c(\"rated_appropriate\", \"rated_feasible\", \"rated_publishable\")])   # authors' usefulness index\nround(tapply(s$usefulness, s$condition, mean), 2)\nm <- aov(usefulness ~ condition, data = s)\nsummary(m)\nss <- summary(m)[[1]][[\"Sum Sq\"]]\nround(ss[1] / sum(ss), 3)   # eta squared\nTukeyHSD(m)                 # which pairs differ, with family-wise 95% CIs\n"
+ },
+ {
+  "group": "Compare groups",
+  "id": "anova2_b",
+  "title": "aov(): two-way, opponent × personalization (set B)",
+  "slide": "Two-way: opponent × personalization",
+  "code": "d <- read.csv(\"debates.csv\")\nm <- aov(shiftTowardOpponent ~ opponent * personalized, data = d)\nsummary(m)\nmodel.tables(m, \"means\")   # cell means\n# Unequal cells (human, not personalized has 300), so R's sequential sums of squares depend on term order.\n# Human-human debates put two people in one debate (debateID): those rows are not independent.\n"
+ },
+ {
+  "group": "Regression",
+  "id": "lm_a",
+  "title": "lm(): novelty ~ condition + creative ability (set A)",
+  "slide": "Linear regression",
+  "code": "s <- read.csv(\"stories.csv\")\ns$novelty <- rowMeans(s[c(\"rated_novel\", \"rated_original\", \"rated_rare\")])\ns$condition <- factor(s$condition, levels = c(\"human_only\", \"ai_1_idea\", \"ai_5_ideas\"))   # baseline: writing alone\nm <- lm(novelty ~ condition + dat_score, data = s)   # 2 stories with no DAT score are dropped\nsummary(m)\nround(confint(m), 3)   # 95% CIs for each coefficient\n"
+ },
+ {
+  "group": "Regression",
+  "id": "lm_int_a",
+  "title": "lm(): does AI help less creative writers more? (set A)",
+  "slide": "Linear regression",
+  "code": "s <- read.csv(\"stories.csv\")\ns$novelty <- rowMeans(s[c(\"rated_novel\", \"rated_original\", \"rated_rare\")])\ns$condition <- factor(s$condition, levels = c(\"human_only\", \"ai_1_idea\", \"ai_5_ideas\"))\nm <- lm(novelty ~ condition * dat_score, data = s)   # does the AI effect depend on creative ability?\nsummary(m)\n# dat_score is measured, not assigned: an interaction with it is not an experimental effect.\n"
+ },
+ {
+  "group": "Regression",
+  "id": "glm_b",
+  "title": "glm(): who thought it was AI? logistic (set B)",
+  "slide": "Regression: assumptions & variants",
+  "code": "d <- read.csv(\"debates.csv\")\nd$thought_ai <- as.integer(d$perceivedOpponent == \"ai\")   # 1 = said \"AI\"\nd$opponent <- factor(d$opponent, levels = c(\"human\", \"gpt4\"))\nm <- glm(thought_ai ~ opponent + personalized, data = d, family = binomial)\nsummary(m)   # coefficients are log-odds\nround(exp(cbind(OR = coef(m), confint.default(m))), 2)   # odds ratios with 95% CIs\n"
+ },
+ {
+  "group": "Regression",
+  "id": "lmer_a",
+  "title": "lmer(): mixed model on all 3,519 ratings (set A)",
+  "slide": "Regression: assumptions & variants",
+  "code": "library(lme4)\nr <- read.csv(\"ratings.csv\")   # set A: one row per rating (3,519)\nr$novelty <- rowMeans(r[c(\"novel\", \"original\", \"rare\")])\nr$condition <- factor(r$condition, levels = c(\"human_only\", \"ai_1_idea\", \"ai_5_ideas\"))\nm <- lmer(novelty ~ condition + (1 | story_id) + (1 | rater_id), data = r)   # stories and raters as random effects\nsummary(m)\nround(confint(m, parm = \"beta_\", method = \"Wald\"), 3)   # 95% CIs for the fixed effects\n"
+ },
+ {
   "group": "Your data",
   "id": "mine",
   "title": "Your own CSV",
@@ -230,7 +308,7 @@
     function pre(text, cls) { const p = document.createElement('pre'); if (cls) p.className = cls; p.textContent = text; out.appendChild(p); }
 
     const webR = new WebR();
-    let ready = false, busy = false;
+    let ready = false, busy = false, lme4Ready = false;
 
     async function boot() {
       try {
@@ -257,6 +335,12 @@
       setStatus('Running…', 'ready');
       const shelter = await new webR.Shelter();
       try {
+        if (/library\(lme4\)/.test(code.value) && !lme4Ready) {   // lme4 only when an example asks for it
+          setStatus('Installing lme4 (first time only, about 15 seconds)…', 'ready');
+          await webR.installPackages(['lme4'], { quiet: true });
+          lme4Ready = true;
+          setStatus('Running…', 'ready');
+        }
         const res = await shelter.captureR(code.value, {
           withAutoprint: true, captureStreams: true, captureConditions: false,
           captureGraphics: { width: 840, height: 520, pointsize: 14, bg: 'white' },

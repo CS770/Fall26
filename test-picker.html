@@ -1,0 +1,388 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Test picker — CS 770 · Fall 2026</title>
+  <meta name="description" content="Answer a few questions about your outcome and design and get the test to run, the effect size to report, the assumptions to check, and an R example on the practice data.">
+  <script>
+    (function () {
+      try {
+        var t = localStorage.getItem('cs770-theme');
+        if (t === 'light' || t === 'dark') document.documentElement.setAttribute('data-theme', t);
+      } catch (e) {}
+    })();
+  </script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400..700&family=Newsreader:ital,opsz,wght@0,6..72,400..600;1,6..72,400..500&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+  <script src="theme.js" defer></script>
+  <style>
+    .trail { display: flex; flex-wrap: wrap; gap: 0.4em; margin: 0 0 1em; padding: 0; list-style: none; }
+    .trail li { font-size: 0.9rem; background: var(--surface); border: 1px solid var(--border); border-radius: 999px; padding: 0.15em 0.75em; }
+    .trail li button { all: unset; cursor: pointer; color: var(--link); }
+    .trail li button:hover { text-decoration: underline; }
+    .trail li button:focus-visible { outline: 2px solid var(--cardinal); outline-offset: 2px; }
+    .q { font-family: var(--display); font-size: 1.35rem; margin: 0.2em 0 0.3em; }
+    .q-help { color: var(--muted); margin: 0 0 0.9em; }
+    .opts { display: grid; gap: 0.6em; }
+    .opt { text-align: left; font: inherit; color: var(--text); background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); padding: 0.7em 1em; cursor: pointer; }
+    .opt:hover { border-color: var(--cardinal); }
+    .opt:focus-visible { outline: 2px solid var(--cardinal); outline-offset: 2px; }
+    .opt strong { display: block; }
+    .opt span { color: var(--muted); font-size: 0.95rem; }
+    .result { border-left: 4px solid var(--accent-bar); padding: 0.2em 0 0.2em 1em; }
+    .result h3 { font-family: var(--display); font-size: 1.6rem; margin: 0.1em 0 0.3em; }
+    .result dl { margin: 0.8em 0; }
+    .result dt { font-weight: 600; margin-top: 0.7em; }
+    .result dd { margin: 0.15em 0 0; }
+    .result pre { background: var(--surface); border: 1px solid var(--border); border-radius: 6px; padding: 0.6em 0.8em; overflow-x: auto; font: 0.88rem/1.45 ui-monospace, Menlo, monospace; white-space: pre; }
+    .actions { display: flex; gap: 0.8em; flex-wrap: wrap; margin-top: 1em; }
+    .actions button, .actions a.btn { font: inherit; padding: 0.35em 1em; border-radius: 6px; border: 1px solid var(--border); background: var(--surface); color: var(--text); cursor: pointer; text-decoration: none; }
+    .actions a.btn.primary { background: var(--cardinal); border-color: var(--cardinal); color: #fff; }
+    .table-wrap { overflow-x: auto; }
+    table.glance { border-collapse: collapse; width: 100%; font-size: 0.95rem; }
+    table.glance th, table.glance td { border-bottom: 1px solid var(--border); padding: 0.4em 0.5em; text-align: left; vertical-align: top; }
+    table.glance th { font-weight: 600; }
+  </style>
+</head>
+<body>
+  <header class="site-header">
+    <div class="wrap">
+      <p class="course-num">CS / Psych / EdPsych 770</p>
+      <h1>Test picker</h1>
+      <p class="meta">
+        Fall 2026 &middot; <strong><a href="https://bmutlu.github.io">Prof. Bilge Mutlu</a></strong> &middot;
+        University of Wisconsin&ndash;Madison<br>
+        A few questions about one hypothesis, then the test, the effect size, and the assumptions to check.
+      </p>
+      <nav class="site-nav" aria-label="Primary">
+        <a href="index.html">Home</a>
+        <a href="schedule.html">Schedule &amp; Readings</a>
+        <a href="syllabus.html">Syllabus</a>
+        <a href="tools.html">Tools &amp; Data</a>
+        <a class="external" href="https://canvas.wisc.edu/courses/527593" target="_blank" rel="noopener">Canvas</a>
+        <button class="theme-toggle" onclick="__cs770cycle()">◐ Auto</button>
+      </nav>
+    </div>
+  </header>
+
+  <main class="syllabus">
+    <section>
+      <h2>One hypothesis at a time</h2>
+      <p>Pick one hypothesis and name its outcome (what you measured) and its predictor (what you manipulated or compared). Run through this once per hypothesis.</p>
+      <ol class="trail" id="trail" aria-label="Your answers so far"></ol>
+      <div id="stage" aria-live="polite"></div>
+    </section>
+
+    <section>
+      <h2>At a glance</h2>
+      <div class="table-wrap">
+        <table class="glance">
+          <thead><tr><th>Outcome</th><th>Predictor and design</th><th>Test</th><th>Effect size</th><th>If assumptions fail</th></tr></thead>
+          <tbody>
+            <tr><td>Continuous</td><td>2 groups, different people</td><td>Welch&rsquo;s <em>t</em></td><td><em>d</em> [CI]</td><td>Mann&ndash;Whitney</td></tr>
+            <tr><td>Continuous</td><td>2 conditions, same people</td><td>Paired <em>t</em></td><td>mean difference [CI], <em>d<sub>z</sub></em></td><td>Wilcoxon signed-rank</td></tr>
+            <tr><td>Continuous</td><td>3+ groups, different people</td><td>One-way ANOVA, then Tukey or planned contrasts</td><td>&eta;&sup2;</td><td>Kruskal&ndash;Wallis</td></tr>
+            <tr><td>Continuous</td><td>2+ factors, different people</td><td>Two-way (factorial) ANOVA</td><td>partial &eta;&sup2;</td><td>Regression with robust SEs</td></tr>
+            <tr><td>Continuous</td><td>Same people in several conditions, or nested data</td><td>Mixed-effects model</td><td>&beta; [CI]</td><td>Friedman (one factor)</td></tr>
+            <tr><td>Continuous</td><td>A continuous predictor, or several predictors</td><td>Linear regression</td><td>&beta; [CI], <em>R</em>&sup2;</td><td>Spearman (one predictor)</td></tr>
+            <tr><td>Two categories</td><td>Groups</td><td>&chi;&sup2; (Fisher&rsquo;s exact for small counts)</td><td>&phi;</td><td>Fisher&rsquo;s exact</td></tr>
+            <tr><td>Two categories</td><td>Continuous or several predictors</td><td>Logistic regression</td><td>odds ratio [CI]</td><td>&mdash;</td></tr>
+            <tr><td>3+ categories</td><td>Groups</td><td>&chi;&sup2; on the full table</td><td>Cram&eacute;r&rsquo;s <em>V</em></td><td>Fisher&rsquo;s exact</td></tr>
+            <tr><td>One ordinal item</td><td>Groups</td><td>Mann&ndash;Whitney (2) or Kruskal&ndash;Wallis (3+)</td><td>rank-biserial <em>r</em></td><td>&mdash;</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <section>
+      <h2>Notes</h2>
+      <ul>
+        <li><strong>A starting point.</strong> The picker matches the test to your variables and design. Your hypothesis still decides which comparison matters, so name it before you look at the data.</li>
+        <li><strong>Unit of analysis first.</strong> If each person, story, or item contributes several rows, either average up to that unit or use a mixed-effects model. Treating those rows as independent inflates your sample.</li>
+        <li><strong>Report the size.</strong> Every path ends with an effect size and its CI. Write the estimate before the p-value, as on Oct 30.</li>
+        <li><strong>Run it.</strong> Each result links to an example in the <a href="r-lab.html">R lab</a> on practice set A or B. Change the variable names and it runs on your own CSV.</li>
+      </ul>
+    </section>
+  </main>
+
+  <footer class="site-footer">
+    <div class="wrap">
+      <p>
+        CS / Psych / EdPsych 770 &middot; Human-Computer Interaction &middot; Fall 2026<br>
+        <a href="https://bmutlu.github.io">Prof. Bilge Mutlu</a> &middot;
+        <a href="https://www.cs.wisc.edu/">Department of Computer Sciences</a>,
+        University of Wisconsin&ndash;Madison
+      </p>
+    </div>
+  </footer>
+
+  <script>
+  (function () {
+    // Questions: each option either leads to another question (next) or to a result (to).
+    var Q = {
+      outcome: {
+        q: 'What is your outcome?',
+        help: 'The thing you measured: the dependent variable in this hypothesis.',
+        opts: [
+          { label: 'A number on a continuous scale', hint: 'time, errors, a score, or a scale averaged from several items (set A&rsquo;s novelty index, set B&rsquo;s shift)', key: 'cont', next: 'contPred' },
+          { label: 'Two categories', hint: 'yes/no, success/failure, chose AI or not (set B&rsquo;s &ldquo;thought it was AI&rdquo;)', key: 'bin', next: 'binPred' },
+          { label: 'Three or more unordered categories', hint: 'which tool they chose, which strategy they used', key: 'cat', next: 'catPred' },
+          { label: 'A single ordinal item', hint: 'one 1&ndash;5 agreement rating, a ranking. If you averaged several items into a scale, choose the first option.', key: 'ord', next: 'ordPred' }
+        ]
+      },
+      contPred: {
+        q: 'What predicts it?',
+        help: 'The independent variable: what you manipulated or compared.',
+        opts: [
+          { label: 'Groups or conditions', hint: 'one or more categorical factors', key: 'groups', next: 'factors' },
+          { label: 'One continuous measure', hint: 'creative ability, age, years of experience', key: 'one cont', to: 'corr' },
+          { label: 'Several predictors, or groups plus a continuous measure', hint: 'condition and creative ability together', key: 'several', next: 'interaction' }
+        ]
+      },
+      factors: {
+        q: 'How many factors?',
+        help: 'A factor is one manipulated or grouping variable. Set B has two: opponent and personalization.',
+        opts: [
+          { label: 'One factor', hint: 'condition, interface, opponent', key: '1 factor', next: 'levels' },
+          { label: 'Two or more factors', hint: 'a factorial design, like 2 &times; 2', key: '2+ factors', next: 'factDesign' }
+        ]
+      },
+      levels: {
+        q: 'How many levels does it have?',
+        help: 'Levels are the groups or conditions. Set A&rsquo;s condition has three.',
+        opts: [
+          { label: 'Two', key: '2 levels', next: 'design2' },
+          { label: 'Three or more', key: '3+ levels', next: 'design3' }
+        ]
+      },
+      design2: {
+        q: 'Who is in each condition?',
+        help: '',
+        opts: [
+          { label: 'Different people in each', hint: 'between participants', key: 'between', next: 'shape2b' },
+          { label: 'The same people in both', hint: 'within participants, or before and after', key: 'within', next: 'shape2w' },
+          { label: 'Several rows per person or item', hint: 'repeated trials, or many ratings per story', key: 'nested', to: 'mixed' }
+        ]
+      },
+      design3: {
+        q: 'Who is in each condition?',
+        help: '',
+        opts: [
+          { label: 'Different people in each', hint: 'between participants', key: 'between', next: 'shape3b' },
+          { label: 'The same people in all of them', hint: 'within participants', key: 'within', to: 'rmanova' },
+          { label: 'Several rows per person or item', hint: 'repeated trials, or many ratings per story', key: 'nested', to: 'mixed' }
+        ]
+      },
+      factDesign: {
+        q: 'Who is in each cell?',
+        help: '',
+        opts: [
+          { label: 'Different people in every cell', hint: 'fully between participants, like set B', key: 'between', to: 'twoway' },
+          { label: 'The same people in some or all cells', hint: 'a within or mixed design', key: 'within/mixed', to: 'mixed' }
+        ]
+      },
+      shape2b: {
+        q: 'What does the outcome look like in each group?',
+        help: 'Plot it first (Oct 30). With about 30 or more per group, the t-test tolerates moderate skew.',
+        opts: [
+          { label: 'Roughly symmetric, or a decent sample', key: 'ok', to: 'welch' },
+          { label: 'Clearly skewed with a small sample, or heavy outliers', key: 'skewed', to: 'mw' }
+        ]
+      },
+      shape2w: {
+        q: 'What do the differences (after minus before) look like?',
+        help: 'The paired test cares about the distribution of the differences, not of each condition.',
+        opts: [
+          { label: 'Roughly symmetric, or a decent sample', key: 'ok', to: 'paired' },
+          { label: 'Clearly skewed with a small sample', key: 'skewed', to: 'wsr' }
+        ]
+      },
+      shape3b: {
+        q: 'What does the outcome look like in each group?',
+        help: '',
+        opts: [
+          { label: 'Roughly symmetric, or a decent sample', key: 'ok', to: 'oneway' },
+          { label: 'Clearly skewed with a small sample', key: 'skewed', to: 'kw' }
+        ]
+      },
+      interaction: {
+        q: 'Does your hypothesis say one effect depends on another?',
+        help: 'Set A&rsquo;s paper says AI ideas helped less creative writers most: the effect of condition depends on creative ability.',
+        opts: [
+          { label: 'No: each predictor on its own', hint: 'main effects, or a covariate you want to hold fixed', key: 'main effects', to: 'lm' },
+          { label: 'Yes: an interaction', key: 'interaction', to: 'lmint' }
+        ]
+      },
+      binPred: {
+        q: 'What predicts it?',
+        help: '',
+        opts: [
+          { label: 'Groups or conditions, different people', key: 'groups', next: 'counts' },
+          { label: 'The same people, measured twice', hint: 'yes/no before and after', key: 'paired', to: 'mcnemar' },
+          { label: 'A continuous measure, or several predictors', key: 'continuous/several', to: 'logit' }
+        ]
+      },
+      counts: {
+        q: 'Are any expected counts below 5?',
+        help: 'Run chisq.test() and look at its $expected table. R warns you when they are small.',
+        opts: [
+          { label: 'No, all 5 or more', key: 'large counts', to: 'chisq' },
+          { label: 'Yes, some cells are small', key: 'small counts', to: 'fisher' }
+        ]
+      },
+      catPred: {
+        q: 'What predicts it?',
+        help: '',
+        opts: [
+          { label: 'Groups or conditions', key: 'groups', to: 'chisqrc' },
+          { label: 'A continuous measure, or several predictors', key: 'continuous/several', to: 'multinom' }
+        ]
+      },
+      ordPred: {
+        q: 'What predicts it?',
+        help: '',
+        opts: [
+          { label: 'Two groups, different people', key: '2 groups', to: 'mw' },
+          { label: 'Three or more groups, different people', key: '3+ groups', to: 'kw' },
+          { label: 'The same people, before and after', key: 'paired', to: 'wsr' },
+          { label: 'A continuous measure, or several predictors', key: 'continuous/several', to: 'polr' }
+        ]
+      }
+    };
+
+    var R = {
+      welch: { test: 'Welch&rsquo;s <em>t</em>-test', why: 'A continuous outcome, two groups of different people. Welch&rsquo;s version does not assume equal variances, and it is R&rsquo;s default.',
+        code: 't.test(outcome ~ group, data = d)', es: 'The raw difference with its 95% CI, and Cohen&rsquo;s <em>d</em> with its CI (<code>psych::cohen.d</code>).',
+        assume: 'Independent observations (one row per person or story). Roughly normal within each group, or a decent sample.', alt: 'Mann&ndash;Whitney: <code>wilcox.test(outcome ~ group, data = d)</code>', lab: 'ttest_a' },
+      paired: { test: 'Paired <em>t</em>-test', why: 'A continuous outcome measured twice on the same people. Pairing removes between-person differences from the noise.',
+        code: 't.test(d$after, d$before, paired = TRUE)', es: 'The mean difference with its 95% CI; <em>d<sub>z</sub></em> = mean difference / SD of the differences.',
+        assume: 'Pairs are independent of each other. The differences are roughly normal.', alt: 'Wilcoxon signed-rank: <code>wilcox.test(d$after, d$before, paired = TRUE)</code>', lab: 'ttest_paired_b' },
+      oneway: { test: 'One-way ANOVA, then pairwise comparisons', why: 'A continuous outcome, three or more groups of different people. One omnibus test avoids the inflated Type I error of many t-tests.',
+        code: 'm <- aov(outcome ~ group, data = d)\nsummary(m)\nTukeyHSD(m)   # which pairs differ', es: '&eta;&sup2; = SS<sub>group</sub> / SS<sub>total</sub>; for the pairs, Tukey&rsquo;s differences with family-wise CIs.',
+        assume: 'Independent observations; roughly normal residuals; similar variances across groups (<code>oneway.test()</code> drops that one).', alt: 'Kruskal&ndash;Wallis: <code>kruskal.test(outcome ~ group, data = d)</code>', lab: 'tukey_a',
+        note: 'If your hypothesis named one comparison in advance (&ldquo;five ideas beat writing alone&rdquo;), a planned contrast tests it directly.' },
+      twoway: { test: 'Two-way (factorial) ANOVA', why: 'A continuous outcome and two crossed factors with different people in each cell. It tests each main effect and their interaction.',
+        code: 'm <- aov(outcome ~ factorA * factorB, data = d)\nsummary(m)\nmodel.tables(m, "means")', es: 'Partial &eta;&sup2; per effect, and the cell means with CIs. Plot the interaction.',
+        assume: 'As for one-way ANOVA. With unequal cell sizes, R&rsquo;s sequential sums of squares depend on term order; say which you used.', alt: 'Linear regression with the same terms, with robust standard errors.', lab: 'anova2_b' },
+      rmanova: { test: 'Repeated-measures ANOVA, or a mixed-effects model', why: 'Three or more conditions on the same people. The mixed model is the more flexible choice and handles missing cells.',
+        code: 'library(lme4)\nm <- lmer(outcome ~ condition + (1 | participant), data = d)\nsummary(m)', es: 'Condition estimates (&beta;) with their CIs.',
+        assume: 'Normal residuals; for classic RM-ANOVA, sphericity.', alt: 'Friedman test: <code>friedman.test(outcome ~ condition | participant, data = d)</code>', lab: 'lmer_a' },
+      mixed: { test: 'Mixed-effects model', why: 'Several rows come from the same person, story, or rater, so the rows are not independent. Random effects model that.',
+        code: 'library(lme4)\nm <- lmer(outcome ~ condition + (1 | participant) + (1 | item), data = d)\nsummary(m)\nconfint(m, parm = "beta_", method = "Wald")', es: 'Fixed-effect estimates (&beta;) with CIs. lme4 prints no p-values on purpose; read the CI.',
+        assume: 'Normal residuals and random effects; the grouping structure is right.', alt: 'Average up to one row per unit, then use a t-test or ANOVA. Simpler, and often the same answer (it is for set A).', lab: 'lmer_a' },
+      corr: { test: 'Correlation, or a simple linear regression', why: 'A continuous outcome and one continuous predictor.',
+        code: 'cor.test(d$x, d$y)                      # Pearson\nm <- lm(y ~ x, data = d); summary(m)    # same test, as a slope', es: '<em>r</em> with its CI, or the slope &beta; with its CI.',
+        assume: 'A linear relationship (plot it); independent observations; no single point driving it.', alt: 'Spearman: <code>cor.test(d$x, d$y, method = "spearman")</code>', lab: 'scatter' },
+      lm: { test: 'Linear regression', why: 'A continuous outcome and several predictors, or groups plus a covariate (ANCOVA written as a regression).',
+        code: 'd$group <- factor(d$group, levels = c("control", "treatment"))   # set the baseline\nm <- lm(outcome ~ group + covariate, data = d)\nsummary(m)\nconfint(m)', es: 'Each &beta; with its CI; <em>R</em>&sup2; for the model.',
+        assume: 'Linearity, independence, constant variance, roughly normal residuals: <code>plot(m)</code>.', alt: 'Robust standard errors, or transform the outcome.', lab: 'lm_a' },
+      lmint: { test: 'Linear regression with an interaction', why: 'Your hypothesis says the effect of one predictor depends on another.',
+        code: 'm <- lm(outcome ~ group * covariate, data = d)\nsummary(m)', es: 'The interaction &beta; with its CI. Plot predicted lines per group.',
+        assume: 'As for linear regression. Centre a continuous predictor so the main effects are readable.', alt: 'Robust standard errors.', lab: 'lm_int_a',
+        note: 'If the moderator is measured, not assigned (creative ability in set A), the interaction is not an experimental effect.' },
+      chisq: { test: '&chi;&sup2; test of independence', why: 'A two-category outcome and groups of different people.',
+        code: 'tab <- table(d$group, d$outcome)\ntab\nchisq.test(tab)', es: '&phi; = &radic;(&chi;&sup2; / n), from <code>chisq.test(tab, correct = FALSE)</code>, plus the row percentages.',
+        assume: 'Each person counted once; expected counts of 5 or more.', alt: 'Fisher&rsquo;s exact: <code>fisher.test(tab)</code>', lab: 'chisq_b' },
+      fisher: { test: 'Fisher&rsquo;s exact test', why: 'A two-category outcome with small expected counts, where &chi;&sup2; is unreliable.',
+        code: 'tab <- table(d$group, d$outcome)\nfisher.test(tab)', es: 'The odds ratio with its CI (printed by <code>fisher.test</code> for 2 &times; 2).',
+        assume: 'Each person counted once.', alt: '&mdash;', lab: 'chisq_a' },
+      mcnemar: { test: 'McNemar&rsquo;s test', why: 'A yes/no outcome measured twice on the same people.',
+        code: 'tab <- table(d$before, d$after)\nmcnemar.test(tab)', es: 'The change in proportion with its CI.',
+        assume: 'Pairs independent of each other.', alt: '&mdash;', lab: '' },
+      logit: { test: 'Logistic regression', why: 'A two-category outcome with a continuous predictor or several predictors.',
+        code: 'm <- glm(outcome01 ~ x1 + x2, data = d, family = binomial)\nsummary(m)                                         # log-odds\nexp(cbind(OR = coef(m), confint.default(m)))       # odds ratios', es: 'Odds ratios with CIs. Odds, not probabilities: say so.',
+        assume: 'Independent observations; enough events per predictor (about 10).', alt: 'A mixed logistic model (<code>glmer</code>) if rows are nested.', lab: 'glm_b' },
+      chisqrc: { test: '&chi;&sup2; test on the full table', why: 'An unordered outcome with three or more categories, and groups.',
+        code: 'tab <- table(d$group, d$outcome)\nchisq.test(tab)', es: 'Cram&eacute;r&rsquo;s <em>V</em> = &radic;(&chi;&sup2; / (n &times; (k &minus; 1))), k the smaller table dimension.',
+        assume: 'Each person counted once; expected counts of 5 or more.', alt: 'Fisher&rsquo;s exact, or merge sparse categories with a reason.', lab: 'chisq_a' },
+      multinom: { test: 'Multinomial logistic regression', why: 'An unordered outcome with three or more categories and a continuous or several predictors. Beyond this course: talk to us first.',
+        code: 'library(nnet)\nm <- multinom(outcome ~ x1 + x2, data = d)\nsummary(m)', es: 'Odds ratios against a baseline category.',
+        assume: 'Enough cases in every category.', alt: 'Collapse to two categories with a reason, then logistic regression.', lab: '' },
+      mw: { test: 'Mann&ndash;Whitney <em>U</em> (Wilcoxon rank-sum)', why: 'Two groups of different people, with an ordinal outcome or a skewed one in a small sample.',
+        code: 'wilcox.test(outcome ~ group, data = d)', es: 'Rank-biserial <em>r</em>, and the medians with IQRs.',
+        assume: 'Independent observations.', alt: '&mdash;', lab: 'ttest_a', note: 'The lab example is the t-test; swap in <code>wilcox.test</code> on the same data.' },
+      wsr: { test: 'Wilcoxon signed-rank test', why: 'The same people measured twice, with an ordinal outcome or skewed differences in a small sample.',
+        code: 'wilcox.test(d$after, d$before, paired = TRUE)', es: 'The median difference, and matched-pairs rank-biserial <em>r</em>.',
+        assume: 'Pairs independent of each other.', alt: '&mdash;', lab: 'ttest_paired_b', note: 'The lab example is the paired t-test; swap in <code>wilcox.test(..., paired = TRUE)</code>.' },
+      kw: { test: 'Kruskal&ndash;Wallis test', why: 'Three or more groups, with an ordinal outcome or a skewed one in a small sample.',
+        code: 'kruskal.test(outcome ~ group, data = d)\npairwise.wilcox.test(d$outcome, d$group, p.adjust.method = "holm")', es: '&epsilon;&sup2; (rank-based), and the medians with IQRs.',
+        assume: 'Independent observations.', alt: '&mdash;', lab: 'anova_a', note: 'The lab example is the ANOVA; swap in <code>kruskal.test</code> on the same data.' },
+      polr: { test: 'Ordinal (proportional-odds) regression', why: 'A single ordinal item with continuous or several predictors. Set B&rsquo;s paper analyses its 1&ndash;5 agreement items this way.',
+        code: 'library(MASS)\nd$item <- factor(d$item, ordered = TRUE)\nm <- polr(item ~ x1 + x2, data = d, Hess = TRUE)\nsummary(m)', es: 'Odds ratios with CIs.',
+        assume: 'Proportional odds: each predictor shifts every threshold by the same amount.', alt: 'Many HCI papers treat a 5- or 7-point item as continuous; if you do, say so and check the result holds with a rank test.', lab: '' }
+    };
+
+    var trail = [];   // [{node, key}]
+    var stage = document.getElementById('stage'), trailEl = document.getElementById('trail');
+
+    function el(tag, attrs, html) { var e = document.createElement(tag); for (var k in attrs) e.setAttribute(k, attrs[k]); if (html != null) e.innerHTML = html; return e; }
+
+    function renderTrail() {
+      trailEl.innerHTML = '';
+      trail.forEach(function (t, i) {
+        var li = el('li'), b = el('button', { type: 'button', title: 'Change this answer' }, t.key);
+        b.addEventListener('click', function () { trail = trail.slice(0, i); ask(t.node); });
+        li.appendChild(b); trailEl.appendChild(li);
+      });
+    }
+
+    function ask(id) {
+      renderTrail();
+      var n = Q[id]; stage.innerHTML = '';
+      stage.appendChild(el('p', { class: 'q' }, n.q));
+      if (n.help) stage.appendChild(el('p', { class: 'q-help' }, n.help));
+      var box = el('div', { class: 'opts' });
+      n.opts.forEach(function (o) {
+        var b = el('button', { type: 'button', class: 'opt' }, '<strong>' + o.label + '</strong>' + (o.hint ? '<span>' + o.hint + '</span>' : ''));
+        b.addEventListener('click', function () {
+          trail.push({ node: id, key: o.key });
+          if (o.next) ask(o.next); else show(o.to);
+        });
+        box.appendChild(b);
+      });
+      stage.appendChild(box);
+      if (trail.length) stage.appendChild(actions(false));
+      var first = stage.querySelector('.opt'); if (first && trail.length) first.focus();
+    }
+
+    function actions(isResult, lab) {
+      var a = el('div', { class: 'actions' });
+      if (isResult && lab) a.appendChild(el('a', { class: 'btn primary', href: 'r-lab.html?ex=' + lab }, 'Run it in the R lab'));
+      if (trail.length) {
+        var back = el('button', { type: 'button' }, 'Back');
+        back.addEventListener('click', function () { var t = trail.pop(); ask(t.node); });
+        a.appendChild(back);
+      }
+      var again = el('button', { type: 'button' }, 'Start over');
+      again.addEventListener('click', function () { trail = []; ask('outcome'); });
+      a.appendChild(again);
+      return a;
+    }
+
+    function show(id) {
+      renderTrail();
+      var r = R[id]; stage.innerHTML = '';
+      var box = el('div', { class: 'result' });
+      box.appendChild(el('p', { class: 'q-help', style: 'margin:0' }, 'Your test'));
+      box.appendChild(el('h3', {}, r.test));
+      box.appendChild(el('p', {}, r.why));
+      var dl = el('dl');
+      [['In R', '<pre>' + r.code.replace(/&/g, '&amp;').replace(/</g, '&lt;') + '</pre>'],
+       ['Effect size to report', r.es], ['Assumptions to check', r.assume], ['If they fail', r.alt]]
+        .concat(r.note ? [['Note', r.note]] : [])
+        .forEach(function (p) { dl.appendChild(el('dt', {}, p[0])); dl.appendChild(el('dd', {}, p[1])); });
+      box.appendChild(dl);
+      if (!r.lab) box.appendChild(el('p', { class: 'q-help' }, 'No R lab example for this one yet; the code above runs in the lab on your own CSV.'));
+      stage.appendChild(box);
+      stage.appendChild(actions(true, r.lab));
+      stage.querySelector('h3').setAttribute('tabindex', '-1'); stage.querySelector('h3').focus();
+    }
+
+    ask('outcome');
+  })();
+  </script>
+</body>
+</html>
